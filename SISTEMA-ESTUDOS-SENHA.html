@@ -1,0 +1,3145 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistema de Estudos — PM-MA & PM-PI 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&family=JetBrains+Mono:wght@400;600;700&family=Sora:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   SISTEMA DE ESTUDOS PM-MA & PM-PI 2026
+   style.css — Todos os estilos do painel + sistema de materiais
+   ============================================================ */
+
+/* ── Variáveis globais ── */
+:root {
+  --bg: #080b10;
+  --surface: #0f1520;
+  --surface2: #0d1118;
+  --s2: #111620;
+  --border: #1a2035;
+  --border2: #252d40;
+
+  /* Cores de acento */
+  --accent-ma: #e8c84a;
+  --accent-pi: #4a8fe8;
+  --gold: #e8c84a;
+  --blue: #4a8fe8;
+  --green: #4fdb8a;
+  --success: #4ae87a;
+  --danger: #e84a4a;
+  --red: #f05555;
+  --orange: #f09055;
+  --purple: #a855f7;
+
+  /* Texto */
+  --text: #dde3f0;
+  --muted: #5a637a;
+  --muted2: #6a7590;
+}
+
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'IBM Plex Sans', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ============================================================
+   NAVEGAÇÃO PRINCIPAL ENTRE PAINÉIS
+   ============================================================ */
+#page-nav {
+  position: sticky;
+  top: 0;
+  z-index: 400;
+  display: flex;
+  background: #060810;
+  border-bottom: 2px solid var(--accent-ma);
+  overflow-x: auto;
+}
+
+.page-nav-btn {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 14px 28px;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: var(--muted);
+  transition: all .2s;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  white-space: nowrap;
+}
+.page-nav-btn:hover { color: var(--text); }
+.page-nav-btn.active { color: var(--accent-ma); border-bottom-color: var(--accent-ma); background: rgba(232,200,74,.04); }
+.page-nav-btn.pn2.active { color: var(--accent-pi); border-bottom-color: var(--accent-pi); background: rgba(74,143,232,.04); }
+.page-nav-btn.pn3.active { color: var(--green); border-bottom-color: var(--green); background: rgba(79,219,138,.04); }
+
+/* PAGE wrappers */
+.page { display: none; }
+.page.active { display: block; }
+
+/* ============================================================
+   PAINEL 1 — PLANO DE ESTUDOS
+   ============================================================ */
+.p1-header {
+  background: var(--surface);
+  border-bottom: 2px solid var(--accent-ma);
+  padding: 18px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.p1-logo { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 3px; color: var(--accent-ma); }
+.header-badges { display: flex; gap: 8px; }
+.badge {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  padding: 4px 10px;
+  border-radius: 2px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+.badge-ma { background: rgba(232,200,74,0.12); color: var(--accent-ma); border: 1px solid rgba(232,200,74,0.3); }
+.badge-pi { background: rgba(74,143,232,0.12); color: var(--accent-pi); border: 1px solid rgba(74,143,232,0.3); }
+
+/* Hero */
+.hero {
+  padding: 40px 32px 32px;
+  background: linear-gradient(135deg, #080b10 0%, #0d1525 50%, #080b10 100%);
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; top:-80px; right:-80px;
+  width:380px; height:380px;
+  background: radial-gradient(circle, rgba(232,200,74,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero::after {
+  content: '';
+  position: absolute; bottom:-80px; left:-60px;
+  width:300px; height:300px;
+  background: radial-gradient(circle, rgba(74,143,232,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(32px,5vw,60px);
+  letter-spacing: 4px;
+  line-height: 1;
+  margin-bottom: 10px;
+}
+.hero h1 .ma { color: var(--accent-ma); }
+.hero h1 .pi { color: var(--accent-pi); }
+.hero-sub {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 1px;
+  margin-bottom: 24px;
+}
+.alert-box {
+  background: rgba(232,200,74,0.08);
+  border: 1px solid rgba(232,200,74,0.3);
+  border-radius: 4px;
+  padding: 12px 16px;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.6;
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 10px;
+  max-width: 700px;
+}
+.alert-box span { font-size: 16px; }
+
+/* Stats row */
+.stats-row {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding: 20px 32px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+.stat-card {
+  flex: 1;
+  min-width: 130px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 14px 18px;
+}
+.stat-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 6px;
+}
+.stat-value { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 2px; line-height: 1; }
+.stat-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+/* Tabs */
+.tabs {
+  display: flex;
+  padding: 0 32px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+}
+.tab {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 13px 18px;
+  cursor: pointer;
+  color: var(--muted);
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+  white-space: nowrap;
+  background: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+}
+.tab:hover { color: var(--text); }
+.tab.active { color: var(--accent-ma); border-bottom-color: var(--accent-ma); }
+
+.content { padding: 28px 32px; max-width: 1200px; margin: 0 auto; }
+.panel { display: none; }
+.panel.active { display: block; }
+
+/* Section typography */
+.section-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px;
+  letter-spacing: 3px;
+  color: var(--accent-ma);
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 8px;
+}
+.section-sub { font-size: 13px; color: var(--muted); margin-bottom: 20px; line-height: 1.6; }
+
+/* Tags */
+.tag-ma { background: rgba(232,200,74,0.1); color: var(--accent-ma); font-family: 'IBM Plex Mono', monospace; font-size: 10px; padding: 2px 7px; border-radius: 2px; }
+.tag-pi { background: rgba(74,143,232,0.1); color: var(--accent-pi); font-family: 'IBM Plex Mono', monospace; font-size: 10px; padding: 2px 7px; border-radius: 2px; }
+.tag-both { background: rgba(74,232,122,0.1); color: var(--success); font-family: 'IBM Plex Mono', monospace; font-size: 10px; padding: 2px 7px; border-radius: 2px; }
+
+/* Comparativo */
+.compare-table { width: 100%; border-collapse: collapse; margin-bottom: 28px; }
+.compare-table th {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 2px solid var(--border);
+}
+.th-ma { color: var(--accent-ma); }
+.th-pi { color: var(--accent-pi); }
+.th-label { color: var(--muted); }
+.compare-table td { padding: 12px 16px; font-size: 13px; border-bottom: 1px solid var(--border); vertical-align: top; }
+.compare-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+/* ── CARDS DE MATÉRIA ── */
+.subject-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+
+.subject-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 18px;
+  transition: border-color 0.2s;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.subject-card:hover { border-color: rgba(232,200,74,0.4); }
+
+.subject-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+.subject-name { font-weight: 600; font-size: 14px; }
+.subject-tags { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 10px; }
+.subject-topics { font-size: 12px; color: var(--muted); line-height: 1.6; margin-bottom: 12px; }
+
+.progress-bar-wrap {
+  background: var(--border);
+  border-radius: 2px;
+  height: 4px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+.progress-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--accent-ma), var(--accent-pi));
+  transition: width 0.5s ease;
+}
+.progress-controls { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.progress-pct { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); }
+
+/* ── SEÇÃO DE MATERIAIS dentro do card ── */
+.materials-section {
+  border-top: 1px solid var(--border);
+  margin-top: 12px;
+  padding-top: 12px;
+}
+.materials-section-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.materials-count {
+  background: rgba(79,219,138,0.12);
+  color: var(--green);
+  font-size: 9px;
+  padding: 2px 7px;
+  border-radius: 10px;
+}
+
+/* Lista de materiais no card da matéria */
+.mat-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px; }
+.mat-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 8px 10px;
+  font-size: 12px;
+  transition: border-color .15s;
+}
+.mat-item:hover { border-color: rgba(232,200,74,0.3); }
+.mat-icon { font-size: 14px; flex-shrink: 0; }
+.mat-info { flex: 1; min-width: 0; }
+.mat-name { font-weight: 600; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mat-meta { display: flex; gap: 6px; align-items: center; margin-top: 2px; flex-wrap: wrap; }
+.mat-type-tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 1px 6px;
+  border-radius: 2px;
+}
+.mat-status-tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 1px 6px;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: opacity .15s;
+}
+.mat-status-tag:hover { opacity: 0.75; }
+
+/* Cores por tipo */
+.type-curso    { background: rgba(74,143,232,0.15); color: var(--blue); }
+.type-pdf      { background: rgba(232,74,74,0.15);  color: var(--danger); }
+.type-video    { background: rgba(168,85,247,0.15); color: var(--purple); }
+.type-link     { background: rgba(240,204,85,0.15); color: var(--gold); }
+.type-livro    { background: rgba(79,219,138,0.15); color: var(--green); }
+.type-anotacao { background: rgba(240,144,85,0.15); color: var(--orange); }
+
+/* Cores por status */
+.status-nao-iniciado { background: rgba(90,99,122,0.2);  color: var(--muted2); }
+.status-estudando    { background: rgba(240,204,85,0.15); color: var(--gold); }
+.status-concluido    { background: rgba(79,219,138,0.15); color: var(--green); }
+
+.mat-actions { display: flex; gap: 4px; flex-shrink: 0; }
+
+/* Botões gerais reutilizáveis */
+.btn-sm {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  padding: 3px 9px;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-sm:hover { border-color: var(--accent-ma); color: var(--accent-ma); }
+.btn-sm.danger:hover { border-color: var(--danger); color: var(--danger); }
+
+.btn-icon {
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--border);
+  background: none;
+  border-radius: 3px;
+  cursor: pointer;
+  color: var(--muted2);
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .15s;
+  flex-shrink: 0;
+}
+.btn-icon:hover             { border-color: var(--gold); color: var(--gold); }
+.btn-icon.open:hover        { border-color: var(--blue); color: var(--blue); }
+.btn-icon.delete:hover      { border-color: var(--danger); color: var(--danger); }
+.btn-icon.status-cycle:hover{ border-color: var(--green); color: var(--green); }
+
+.btn-add-mat {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  background: none;
+  border: 1px dashed rgba(79,219,138,0.4);
+  color: var(--green);
+  padding: 6px 12px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all .15s;
+  width: 100%;
+  text-align: center;
+}
+.btn-add-mat:hover { background: rgba(79,219,138,0.06); border-color: var(--green); }
+
+.btn-add-section {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  background: none;
+  border: 1px dashed var(--muted);
+  color: var(--muted);
+  padding: 8px 18px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all .15s;
+  width: 100%;
+  margin-top: 8px;
+}
+.btn-add-section:hover { border-color: var(--accent-ma); color: var(--accent-ma); }
+
+.btn-edit-inline {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  padding: 3px 9px;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all .15s;
+}
+.btn-edit-inline:hover { border-color: var(--accent-ma); color: var(--accent-ma); }
+.btn-edit-inline.del:hover { border-color: var(--danger); color: var(--danger); }
+.edit-row { display: flex; gap: 6px; margin-top: 8px; }
+
+/* Checklist */
+.check-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 11px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  margin-bottom: 7px;
+  transition: all 0.15s;
+}
+.check-item:hover { border-color: var(--accent-pi); }
+.check-item.done { opacity: 0.45; }
+.check-item.done .check-text { text-decoration: line-through; color: var(--muted); }
+.check-box {
+  width: 17px; height: 17px;
+  border: 2px solid var(--muted);
+  border-radius: 2px;
+  flex-shrink: 0;
+  margin-top: 1px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+  font-size: 10px;
+  cursor: pointer;
+}
+.check-item.done .check-box { background: var(--success); border-color: var(--success); color: #000; }
+.check-text { font-size: 13px; line-height: 1.5; flex: 1; cursor: pointer; }
+.check-tag { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); margin-top: 2px; }
+.checklist-section { margin-bottom: 28px; }
+
+/* Timeline cronograma */
+.timeline { position: relative; padding-left: 28px; }
+.timeline::before { content: ''; position: absolute; left: 6px; top: 0; bottom: 0; width: 2px; background: var(--border); }
+.timeline-phase { position: relative; margin-bottom: 28px; }
+.timeline-dot { position: absolute; left: -24px; top: 4px; width: 12px; height: 12px; border-radius: 50%; background: var(--accent-ma); border: 2px solid var(--bg); }
+.phase-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-ma); margin-bottom: 5px; }
+.phase-title { font-weight: 600; font-size: 16px; margin-bottom: 6px; }
+.phase-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+.phase-items { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px; }
+.phase-tag { font-family: 'IBM Plex Mono', monospace; font-size: 10px; background: var(--border); color: var(--text); padding: 3px 9px; border-radius: 2px; }
+
+/* Quiz / Simulado */
+.quiz-card { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 26px; margin-bottom: 18px; }
+.question-num { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 2px; margin-bottom: 12px; }
+.question-source { font-family: 'IBM Plex Mono', monospace; font-size: 10px; margin-bottom: 14px; padding: 4px 10px; border-radius: 2px; display: inline-block; }
+.src-ma { background: rgba(232,200,74,0.1); color: var(--accent-ma); }
+.src-pi { background: rgba(74,143,232,0.1); color: var(--accent-pi); }
+.src-both { background: rgba(74,232,122,0.1); color: var(--success); }
+.question-text { font-size: 14px; line-height: 1.7; margin-bottom: 18px; }
+.options { display: flex; flex-direction: column; gap: 7px; }
+.option {
+  display: flex; align-items: center; gap: 12px;
+  padding: 11px 14px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: left; width: 100%;
+  color: var(--text);
+  font-size: 13px;
+  font-family: 'IBM Plex Sans', sans-serif;
+}
+.option:hover:not(:disabled) { border-color: var(--accent-pi); }
+.option.correct { border-color: var(--success); background: rgba(74,232,122,0.07); color: var(--success); }
+.option.wrong { border-color: var(--danger); background: rgba(232,74,74,0.07); color: var(--danger); }
+.option-letter { font-family: 'Bebas Neue', sans-serif; font-size: 17px; color: var(--accent-ma); width: 18px; flex-shrink: 0; }
+.feedback { margin-top: 14px; padding: 12px 14px; border-radius: 4px; font-size: 12px; line-height: 1.6; display: none; }
+.feedback.correct { background: rgba(74,232,122,0.08); border: 1px solid var(--success); color: var(--success); }
+.feedback.wrong { background: rgba(232,74,74,0.08); border: 1px solid var(--danger); color: var(--text); }
+.btn-next { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; background: var(--accent-ma); color: var(--bg); border: none; padding: 11px 26px; border-radius: 2px; cursor: pointer; margin-top: 18px; display: none; }
+.btn-next:hover { opacity: 0.85; }
+.quiz-score { text-align: center; padding: 36px; display: none; }
+.quiz-score .big-score { font-family: 'Bebas Neue', sans-serif; font-size: 72px; color: var(--accent-ma); letter-spacing: 4px; }
+.quiz-score p { color: var(--muted); margin-top: 8px; font-size: 13px; }
+.btn-restart { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; background: none; color: var(--accent-ma); border: 1px solid var(--accent-ma); padding: 11px 26px; border-radius: 2px; cursor: pointer; margin-top: 22px; transition: all 0.15s; }
+.btn-restart:hover { background: var(--accent-ma); color: var(--bg); }
+
+/* Tips */
+.tips-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+.tip-card { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 18px; }
+.tip-icon { font-size: 24px; margin-bottom: 8px; }
+.tip-title { font-weight: 600; font-size: 14px; margin-bottom: 6px; color: var(--accent-ma); }
+.tip-text { font-size: 12px; color: var(--muted); line-height: 1.7; }
+
+/* ============================================================
+   PAINEL 2 — ROTINA DIÁRIA
+   ============================================================ */
+.p2-body { font-family: 'Sora', sans-serif; }
+.p2-header {
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+  padding: 0 28px;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 56px;
+}
+.p2-logo { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 3px; color: var(--gold); }
+.header-right { display: flex; align-items: center; gap: 12px; }
+.day-badge { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted2); background: var(--s2); border: 1px solid var(--border); padding: 5px 12px; border-radius: 3px; letter-spacing: 1px; }
+.clock { font-family: 'JetBrains Mono', monospace; font-size: 14px; color: var(--gold); letter-spacing: 2px; }
+
+.app { display: grid; grid-template-columns: 280px 1fr; min-height: calc(100vh - 112px); }
+.sidebar { background: var(--surface2); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow-y: auto; position: sticky; top: 112px; height: calc(100vh - 112px); }
+.sidebar-section { padding: 20px 20px 0; }
+.sidebar-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+
+.days-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 20px; }
+.day-btn { aspect-ratio: 1; border: 1px solid var(--border); background: var(--s2); border-radius: 3px; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: all 0.15s; font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--muted2); gap: 2px; }
+.day-btn .dn { font-size: 7px; color: var(--muted); }
+.day-btn:hover { border-color: var(--gold); color: var(--gold); }
+.day-btn.active { background: rgba(240,204,85,0.12); border-color: var(--gold); color: var(--gold); }
+.day-btn.has-routine::after { content: ''; display: block; width: 4px; height: 4px; border-radius: 50%; background: var(--green); margin-top: 2px; }
+
+.stat-mini { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+.stat-row-mini { display: flex; align-items: center; justify-content: space-between; background: var(--s2); border: 1px solid var(--border); border-radius: 3px; padding: 10px 12px; }
+.stat-row-mini .slabel { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--muted2); letter-spacing: 1px; }
+.stat-row-mini .sval { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 1px; }
+
+.habit-mini { display: flex; flex-direction: column; gap: 6px; margin-bottom: 20px; }
+.habit-row { display: flex; align-items: center; justify-content: space-between; }
+.habit-name { font-size: 11px; color: var(--muted2); }
+.habit-dots { display: flex; gap: 3px; }
+.habit-dot { width: 10px; height: 10px; border-radius: 2px; background: var(--border); cursor: pointer; transition: all 0.1s; }
+.habit-dot.done { background: var(--green); }
+.habit-dot:hover { opacity: 0.7; }
+
+.motivation-box { margin: 16px 20px 20px; background: linear-gradient(135deg, rgba(240,204,85,0.08), rgba(85,153,240,0.08)); border: 1px solid rgba(240,204,85,0.2); border-radius: 4px; padding: 14px; font-size: 12px; color: var(--muted2); line-height: 1.6; font-style: italic; }
+.motivation-box strong { color: var(--gold); font-style: normal; display: block; margin-bottom: 4px; font-size: 10px; font-family: 'JetBrains Mono', monospace; letter-spacing: 2px; }
+
+.main { padding: 24px 28px; overflow-y: auto; }
+.main-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
+.main-title { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 3px; }
+.main-title span { color: var(--gold); }
+.btn-primary { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; background: var(--gold); color: var(--bg); border: none; padding: 10px 20px; border-radius: 3px; cursor: pointer; transition: opacity 0.15s; }
+.btn-primary:hover { opacity: 0.85; }
+.btn-secondary { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; background: none; color: var(--muted2); border: 1px solid var(--border); padding: 9px 18px; border-radius: 3px; cursor: pointer; transition: all 0.15s; }
+.btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
+
+.day-progress-bar { background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 14px 18px; margin-bottom: 24px; display: flex; align-items: center; gap: 16px; }
+.dpb-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted2); white-space: nowrap; }
+.dpb-track { flex: 1; background: var(--border); border-radius: 2px; height: 6px; overflow: hidden; }
+.dpb-fill { height: 100%; border-radius: 2px; background: linear-gradient(90deg, var(--gold), var(--green)); transition: width 0.4s ease; }
+.dpb-pct { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: var(--gold); letter-spacing: 1px; min-width: 48px; text-align: right; }
+
+.time-block { display: grid; grid-template-columns: 72px 1fr; gap: 0; margin-bottom: 4px; position: relative; animation: fadeIn2 0.3s ease; }
+@keyframes fadeIn2 { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
+.time-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); padding: 14px 12px 14px 0; text-align: right; border-right: 2px solid var(--border); position: relative; user-select: none; }
+.time-label::after { content: ''; position: absolute; right: -5px; top: 50%; transform: translateY(-50%); width: 8px; height: 8px; border-radius: 50%; background: var(--border); border: 2px solid var(--bg); }
+.block-card { margin-left: 16px; border-radius: 4px; padding: 12px 16px; border-left: 3px solid; position: relative; transition: all 0.15s; cursor: pointer; min-height: 52px; }
+.block-card:hover { filter: brightness(1.1); }
+.block-card.cat-estudo { background: rgba(85,153,240,0.1); border-color: var(--blue); }
+.block-card.cat-fisico { background: rgba(79,219,138,0.1); border-color: var(--green); }
+.block-card.cat-alimentacao { background: rgba(240,144,85,0.1); border-color: var(--orange); }
+.block-card.cat-descanso { background: rgba(168,85,247,0.1); border-color: var(--purple); }
+.block-card.cat-revisao { background: rgba(240,204,85,0.1); border-color: var(--gold); }
+.block-card.cat-outro { background: rgba(255,255,255,0.04); border-color: var(--muted); }
+.block-card.done { opacity: 0.45; }
+.block-card.done .block-title { text-decoration: line-through; }
+.block-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+.block-title { font-weight: 600; font-size: 13px; }
+.block-meta { display: flex; align-items: center; gap: 8px; }
+.block-duration { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted2); background: rgba(255,255,255,0.05); padding: 2px 7px; border-radius: 2px; }
+.block-cat-tag { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; padding: 2px 7px; border-radius: 2px; }
+.cat-estudo .block-cat-tag { color: var(--blue); background: rgba(85,153,240,0.15); }
+.cat-fisico .block-cat-tag { color: var(--green); background: rgba(79,219,138,0.15); }
+.cat-alimentacao .block-cat-tag { color: var(--orange); background: rgba(240,144,85,0.15); }
+.cat-descanso .block-cat-tag { color: var(--purple); background: rgba(168,85,247,0.15); }
+.cat-revisao .block-cat-tag { color: var(--gold); background: rgba(240,204,85,0.15); }
+.cat-outro .block-cat-tag { color: var(--muted2); background: rgba(255,255,255,0.06); }
+.block-note { font-size: 11px; color: var(--muted2); margin-top: 3px; line-height: 1.5; }
+.block-actions { display: flex; gap: 6px; }
+.block-btn { width: 26px; height: 26px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); border-radius: 3px; cursor: pointer; color: var(--muted2); font-size: 12px; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+.block-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+.empty-state { text-align: center; padding: 60px 20px; border: 2px dashed var(--border); border-radius: 8px; margin-top: 20px; }
+.empty-icon { font-size: 40px; margin-bottom: 14px; }
+.empty-title { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 2px; color: var(--muted2); margin-bottom: 8px; }
+.empty-sub { font-size: 13px; color: var(--muted); }
+
+.pomodoro-wrap { background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 16px 20px; margin-bottom: 20px; }
+.pomo-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.pomo-title { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 2px; color: var(--muted2); text-transform: uppercase; }
+.pomo-display { font-family: 'Bebas Neue', sans-serif; font-size: 48px; letter-spacing: 4px; color: var(--gold); text-align: center; margin: 8px 0; }
+.pomo-controls { display: flex; gap: 8px; justify-content: center; }
+.pomo-btn { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; background: none; border: 1px solid var(--border); color: var(--muted2); padding: 7px 16px; border-radius: 3px; cursor: pointer; transition: all 0.15s; }
+.pomo-btn:hover { border-color: var(--gold); color: var(--gold); }
+.pomo-btn.running { border-color: var(--green); color: var(--green); }
+.pomo-status { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--muted); text-align: center; margin-top: 8px; letter-spacing: 1px; }
+.pomo-cycles { display: flex; gap: 4px; justify-content: center; margin-top: 8px; }
+.pomo-cycle { width: 8px; height: 8px; border-radius: 50%; background: var(--border); transition: background 0.2s; }
+.pomo-cycle.done { background: var(--gold); }
+
+/* ============================================================
+   PAINEL 3 — BANCO DE MATERIAIS
+   ============================================================ */
+.banco-header {
+  background: var(--surface);
+  border-bottom: 2px solid var(--green);
+  padding: 18px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.banco-logo { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 3px; color: var(--green); }
+.banco-stats { display: flex; gap: 8px; flex-wrap: wrap; }
+.banco-stat {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1px;
+  padding: 5px 12px;
+  border-radius: 3px;
+  background: rgba(79,219,138,0.1);
+  color: var(--green);
+  border: 1px solid rgba(79,219,138,0.25);
+}
+
+/* Filtros */
+.banco-filters {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 32px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.filter-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; white-space: nowrap; }
+.filter-select {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 7px 12px;
+  border-radius: 3px;
+  cursor: pointer;
+  outline: none;
+  transition: border-color .15s;
+  appearance: none;
+  -webkit-appearance: none;
+  min-width: 160px;
+}
+.filter-select:focus { border-color: var(--green); }
+.filter-search {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 7px 12px;
+  border-radius: 3px;
+  outline: none;
+  transition: border-color .15s;
+  flex: 1;
+  min-width: 180px;
+}
+.filter-search:focus { border-color: var(--green); }
+.btn-filter-clear {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  padding: 7px 14px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all .15s;
+  white-space: nowrap;
+}
+.btn-filter-clear:hover { border-color: var(--green); color: var(--green); }
+
+/* Grid do banco */
+.banco-content { padding: 28px 32px; max-width: 1200px; margin: 0 auto; }
+.banco-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+
+/* Card do banco de materiais */
+.banco-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 18px;
+  transition: all .2s;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  animation: fadeIn2 0.3s ease;
+}
+.banco-card:hover { border-color: rgba(79,219,138,0.4); transform: translateY(-1px); }
+
+.banco-card-top { display: flex; align-items: flex-start; gap: 12px; }
+.banco-card-icon {
+  font-size: 24px;
+  width: 44px;
+  height: 44px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.banco-card-info { flex: 1; min-width: 0; }
+.banco-card-name { font-weight: 600; font-size: 14px; margin-bottom: 6px; }
+.banco-card-tags { display: flex; gap: 5px; flex-wrap: wrap; }
+.banco-materia-tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 2px;
+  background: rgba(232,200,74,0.1);
+  color: var(--gold);
+  border: 1px solid rgba(232,200,74,0.2);
+}
+.banco-card-desc {
+  font-size: 12px;
+  color: var(--muted2);
+  line-height: 1.6;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.banco-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.banco-card-date { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--muted); }
+.banco-card-actions { display: flex; gap: 5px; }
+
+/* Empty banco */
+.banco-empty { text-align: center; padding: 80px 20px; }
+.banco-empty-icon { font-size: 48px; margin-bottom: 16px; }
+.banco-empty-title { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 3px; color: var(--muted2); margin-bottom: 8px; }
+.banco-empty-sub { font-size: 13px; color: var(--muted); max-width: 400px; margin: 0 auto; line-height: 1.6; }
+
+/* ============================================================
+   MODAIS (compartilhados entre painéis)
+   ============================================================ */
+.overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.8);
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.overlay.open { display: flex; }
+
+.modal {
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  padding: 28px;
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideUp 0.22s ease;
+}
+.modal-wide { max-width: 580px; }
+@keyframes slideUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:none; } }
+
+.modal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; }
+.modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 3px; color: var(--gold); }
+.modal-close { background:none; border:none; color:var(--muted2); font-size:20px; cursor:pointer; transition: color .15s; }
+.modal-close:hover { color: var(--danger); }
+
+.form-row { margin-bottom: 16px; }
+.form-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted2); margin-bottom: 7px; display: block; }
+.form-input {
+  width: 100%;
+  background: var(--s2);
+  border: 1px solid var(--border2);
+  border-radius: 3px;
+  color: var(--text);
+  font-family: 'Sora', sans-serif;
+  font-size: 13px;
+  padding: 10px 13px;
+  transition: border-color 0.15s;
+  outline: none;
+}
+.form-input:focus { border-color: var(--gold); }
+.form-select { appearance: none; -webkit-appearance: none; cursor: pointer; }
+textarea.form-input { resize: vertical; min-height: 80px; }
+.form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+.cat-picker { display: flex; gap: 8px; flex-wrap: wrap; }
+.cat-opt { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1px; padding: 7px 12px; border-radius: 3px; cursor: pointer; border: 1px solid var(--border); background: var(--s2); color: var(--muted2); transition: all 0.15s; text-transform: uppercase; }
+.cat-opt:hover { opacity: 0.8; }
+.cat-opt.sel-estudo { border-color: var(--blue); color: var(--blue); background: rgba(85,153,240,0.12); }
+.cat-opt.sel-fisico { border-color: var(--green); color: var(--green); background: rgba(79,219,138,0.12); }
+.cat-opt.sel-alimentacao { border-color: var(--orange); color: var(--orange); background: rgba(240,144,85,0.12); }
+.cat-opt.sel-descanso { border-color: var(--purple); color: var(--purple); background: rgba(168,85,247,0.12); }
+.cat-opt.sel-revisao { border-color: var(--gold); color: var(--gold); background: rgba(240,204,85,0.12); }
+.cat-opt.sel-outro { border-color: var(--muted2); color: var(--muted2); background: rgba(255,255,255,0.06); }
+
+.modal-tabs { display: flex; gap: 0; margin-bottom: 22px; border-bottom: 1px solid var(--border); }
+.modal-tab { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; padding: 9px 16px; cursor: pointer; color: var(--muted); border-bottom: 2px solid transparent; background: none; border-top: none; border-left: none; border-right: none; transition: all 0.15s; }
+.modal-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+.modal-footer { display: flex; gap: 10px; margin-top: 24px; justify-content: flex-end; }
+
+.template-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 20px; }
+.template-card { background: var(--s2); border: 1px solid var(--border); border-radius: 4px; padding: 12px; cursor: pointer; transition: all 0.15s; text-align: left; }
+.template-card:hover { border-color: var(--gold); }
+.template-name { font-size: 12px; font-weight: 600; margin-bottom: 4px; color: var(--gold); }
+.template-desc { font-size: 10px; color: var(--muted2); line-height: 1.5; }
+.template-section-title { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; margin-bottom: 10px; }
+
+.week-copy { display: flex; flex-direction: column; gap: 7px; }
+.week-copy-row { display: flex; align-items: center; justify-content: space-between; background: var(--s2); border: 1px solid var(--border); border-radius: 3px; padding: 10px 14px; }
+.week-copy-label { font-size: 13px; }
+.week-copy-count { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted2); }
+
+/* Toast de confirmação */
+#toast {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 2000;
+  background: var(--surface2);
+  border: 1px solid var(--green);
+  border-radius: 6px;
+  padding: 12px 20px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: var(--green);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  transform: translateY(20px);
+  opacity: 0;
+  transition: all .3s ease;
+  pointer-events: none;
+}
+#toast.show { transform: translateY(0); opacity: 1; }
+
+/* ── Responsivo ── */
+@media (max-width: 768px) {
+  .app { grid-template-columns: 1fr; }
+  .sidebar { position: static; height: auto; }
+  .main { padding: 16px; }
+  .template-grid, .form-row-2 { grid-template-columns: 1fr; }
+  .banco-grid, .subject-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .stats-row { flex-direction: column; }
+  .content, .banco-content { padding: 18px 14px; }
+  .p1-header, .hero, .tabs, .banco-filters { padding-left: 14px; padding-right: 14px; }
+  .compare-table { font-size: 12px; }
+  .compare-table td, .compare-table th { padding: 9px 10px; }
+  .page-nav-btn { padding: 12px 14px; font-size: 10px; letter-spacing: 1px; }
+}
+
+
+/* ============================================================
+   TELA DE LOGIN
+   ============================================================ */
+#login-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #080b10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* Fundo decorativo animado */
+#login-screen::before {
+  content: '';
+  position: absolute;
+  top: -200px; right: -200px;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(232,200,74,0.07) 0%, transparent 65%);
+  pointer-events: none;
+}
+#login-screen::after {
+  content: '';
+  position: absolute;
+  bottom: -200px; left: -200px;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(74,143,232,0.07) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+.login-box {
+  background: #0f1520;
+  border: 1px solid #1a2035;
+  border-radius: 8px;
+  padding: 48px 40px 40px;
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  position: relative;
+  z-index: 1;
+  animation: loginFadeIn 0.5s ease;
+}
+@keyframes loginFadeIn {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.login-badge {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent-ma);
+  background: rgba(232,200,74,0.08);
+  border: 1px solid rgba(232,200,74,0.25);
+  padding: 5px 14px;
+  border-radius: 2px;
+  margin-bottom: 20px;
+}
+
+.login-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 42px;
+  letter-spacing: 5px;
+  color: var(--accent-ma);
+  line-height: 1;
+  margin-bottom: 6px;
+  text-align: center;
+}
+
+.login-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: var(--muted);
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.login-field-wrap {
+  width: 100%;
+  margin-bottom: 14px;
+  position: relative;
+}
+
+.login-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted2);
+  display: block;
+  margin-bottom: 8px;
+}
+
+.login-input {
+  width: 100%;
+  background: #060810;
+  border: 1px solid #1a2035;
+  border-radius: 4px;
+  color: var(--text);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 22px;
+  letter-spacing: 8px;
+  padding: 14px 48px 14px 18px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  text-align: center;
+}
+.login-input:focus {
+  border-color: var(--accent-ma);
+  box-shadow: 0 0 0 3px rgba(232,200,74,0.08);
+}
+.login-input.error {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 3px rgba(232,74,74,0.08);
+  animation: loginShake 0.38s ease;
+}
+@keyframes loginShake {
+  0%,100% { transform: translateX(0); }
+  20%      { transform: translateX(-8px); }
+  40%      { transform: translateX(8px); }
+  60%      { transform: translateX(-5px); }
+  80%      { transform: translateX(5px); }
+}
+
+/* Toggle visibilidade da senha */
+.login-toggle {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 16px;
+  transition: color .15s;
+  padding: 0;
+  line-height: 1;
+}
+.login-toggle:hover { color: var(--accent-ma); }
+
+.login-error {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: var(--danger);
+  text-align: center;
+  height: 16px;
+  margin-bottom: 20px;
+  opacity: 0;
+  transition: opacity .25s;
+}
+.login-error.visible { opacity: 1; }
+
+.login-btn {
+  width: 100%;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  background: var(--accent-ma);
+  color: #080b10;
+  border: none;
+  padding: 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: opacity .15s, transform .1s;
+  font-weight: 600;
+}
+.login-btn:hover  { opacity: 0.88; }
+.login-btn:active { transform: scale(0.98); }
+
+.login-footer {
+  margin-top: 28px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 1px;
+  text-align: center;
+  opacity: 0.5;
+}
+
+/* Oculta o painel principal até o login */
+#main-app { display: none; }
+
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     TELA DE LOGIN
+     ══════════════════════════════════════ -->
+<div id="login-screen">
+  <div class="login-box">
+    <span class="login-badge">⚖ PM-MA &amp; PM-PI 2026</span>
+    <div class="login-logo">FORÇA TOTAL</div>
+    <div class="login-title">Acesso ao Painel de Estudos</div>
+
+    <div class="login-field-wrap">
+      <label class="login-label" for="login-pwd">Senha</label>
+      <input
+        type="password"
+        id="login-pwd"
+        class="login-input"
+        placeholder="••••"
+        maxlength="20"
+        autocomplete="current-password"
+        onkeydown="if(event.key==='Enter') doLogin()"
+      >
+      <button class="login-toggle" onclick="togglePwdVisibility()" id="toggle-btn" title="Mostrar/ocultar senha">👁</button>
+    </div>
+
+    <div class="login-error" id="login-error">Senha incorreta. Tente novamente.</div>
+
+    <button class="login-btn" onclick="doLogin()">Entrar</button>
+
+    <div class="login-footer">Sistema protegido por senha</div>
+  </div>
+</div>
+
+<!-- PAINEL PRINCIPAL (oculto até login) -->
+<div id="main-app">
+
+
+<!-- ══════════════════════════════════════
+     NAVEGAÇÃO PRINCIPAL (3 painéis)
+     ══════════════════════════════════════ -->
+<div id="page-nav">
+  <button class="page-nav-btn active"  onclick="switchPage('p1',this)">⚖ Plano de Estudos</button>
+  <button class="page-nav-btn pn2"     onclick="switchPage('p2',this)">📅 Rotina Diária</button>
+  <button class="page-nav-btn pn3"     onclick="switchPage('p3',this)">📂 Banco de Materiais</button>
+</div>
+
+<!-- ══════════════════════════════════════
+     PÁGINA 1 — PLANO DE ESTUDOS
+     ══════════════════════════════════════ -->
+<div class="page active" id="p1">
+
+  <!-- Cabeçalho -->
+  <div class="p1-header">
+    <div class="p1-logo">⚖ FORÇA TOTAL</div>
+    <div class="header-badges">
+      <span class="badge badge-ma">PM-MA 2026</span>
+      <span class="badge badge-pi">PM-PI 2026</span>
+    </div>
+  </div>
+
+  <!-- Hero -->
+  <div class="hero">
+    <h1>SOLDADO<br><span class="ma">PM-MA</span> & <span class="pi">PM-PI</span></h1>
+    <div class="hero-sub">// Dois concursos · Uma preparação · Do zero à aprovação</div>
+    <div class="alert-box">
+      <span>⚠</span>
+      <div>
+        <strong>Atenção:</strong> Os editais de 2026 ainda não foram publicados.
+        O painel usa como base o último edital de cada PM (MA/2017 e PI/2021).
+        Quando o edital sair, atualize seu estudo conforme o conteúdo oficial.
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-label">Progresso geral</div>
+      <div class="stat-value" id="stat-prog" style="color:var(--accent-ma)">0%</div>
+      <div class="stat-sub">das matérias</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Vagas PM-MA</div>
+      <div class="stat-value" style="color:var(--accent-ma)">1.000+</div>
+      <div class="stat-sub">Soldado · Edital ~abril 2026</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Vagas PM-PI</div>
+      <div class="stat-value" style="color:var(--accent-pi)">1.000</div>
+      <div class="stat-sub">500 imediatas · Edital ~junho 2026</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Checklists feitos</div>
+      <div class="stat-value" id="stat-checks" style="color:var(--success)">0</div>
+      <div class="stat-sub" id="stat-checks-total">de 18 itens</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Materiais</div>
+      <div class="stat-value" id="stat-mat-total" style="color:var(--green)">0</div>
+      <div class="stat-sub"><span id="stat-mat-done">0</span> concluídos</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Simulado</div>
+      <div class="stat-value" id="stat-quiz" style="color:var(--accent-pi)">—</div>
+      <div class="stat-sub">última pontuação</div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab active"  onclick="showPanel('comparativo', this)">Comparativo</button>
+    <button class="tab"         onclick="showPanel('materias',    this)">Matérias</button>
+    <button class="tab"         onclick="showPanel('checklist',   this)">Checklist</button>
+    <button class="tab"         onclick="showPanel('cronograma',  this)">Cronograma</button>
+    <button class="tab"         onclick="showPanel('simulado',    this)">Simulado</button>
+    <button class="tab"         onclick="showPanel('dicas',       this)">Dicas</button>
+  </div>
+
+  <div class="content">
+
+    <!-- ── COMPARATIVO ── -->
+    <div class="panel active" id="panel-comparativo">
+      <div class="section-title">Comparativo PM-MA × PM-PI</div>
+      <div class="section-sub">
+        Baseado nos últimos editais (PM-MA/2017 e PM-PI/2021) como referência para 2026.
+        Confirme sempre com o edital oficial.
+      </div>
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th class="th-label">Critério</th>
+            <th class="th-ma">⭐ PM-MA</th>
+            <th class="th-pi">⭐ PM-PI</th>
+            <th class="th-label" style="width:64px"></th>
+          </tr>
+        </thead>
+        <tbody id="cmp-tbody"></tbody>
+      </table>
+      <button class="btn-add-section" onclick="openCmpModal()">+ Adicionar linha</button>
+
+      <div class="section-title" style="margin-top:28px">Matérias em comum (foco máximo)</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;">
+        <span class="tag-both">Língua Portuguesa</span>
+        <span class="tag-both">Noções de Informática</span>
+        <span class="tag-both">História do Brasil</span>
+        <span class="tag-both">Geografia do Brasil</span>
+        <span class="tag-both">Legislação Institucional/Estadual</span>
+        <span class="tag-both">Conhecimentos Gerais / Atualidades</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;">
+        <div style="background:var(--surface);border:1px solid rgba(232,200,74,0.3);border-radius:4px;padding:18px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent-ma);margin-bottom:10px;letter-spacing:1.5px;">EXCLUSIVO PM-MA</div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.8;">
+            ▸ Raciocínio Lógico e Quantitativo<br>
+            ▸ História do Maranhão<br>
+            ▸ Geografia do Maranhão<br>
+            ▸ Estilo Cebraspe (certo/errado — ponto negativo!)
+          </div>
+        </div>
+        <div style="background:var(--surface);border:1px solid rgba(74,143,232,0.3);border-radius:4px;padding:18px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent-pi);margin-bottom:10px;letter-spacing:1.5px;">EXCLUSIVO PM-PI</div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.8;">
+            ▸ Matemática<br>
+            ▸ Legislação do Estado do Piauí<br>
+            ▸ Redação dissertativa (20–30 linhas)<br>
+            ▸ Estilo NUCEPE (múltipla escolha — sem ponto negativo)
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── MATÉRIAS ── -->
+    <div class="panel" id="panel-materias">
+      <div class="section-title">Matérias para estudar</div>
+      <div class="section-sub">
+        Clique em <strong>+25%</strong> para registrar seu avanço.
+        Use <strong>Adicionar Material</strong> para vincular cursos, PDFs, links e anotações a cada matéria.
+        <span style="color:var(--accent-ma)">Amarelo</span> = PM-MA ·
+        <span style="color:var(--accent-pi)">Azul</span> = PM-PI ·
+        <span style="color:var(--success)">Verde</span> = Ambos
+      </div>
+      <div class="subject-grid" id="subject-grid"></div>
+      <button class="btn-add-section" style="max-width:400px" onclick="openSubjModal()">+ Adicionar matéria</button>
+    </div>
+
+    <!-- ── CHECKLIST ── -->
+    <div class="panel" id="panel-checklist">
+      <div class="checklist-section">
+        <div class="section-title">Documentação & Requisitos</div>
+        <div id="checks-docs"></div>
+        <button class="btn-add-section" onclick="openCheckModal('docs')">+ Adicionar item</button>
+      </div>
+      <div class="checklist-section">
+        <div class="section-title">Estudo</div>
+        <div id="checks-estudo"></div>
+        <button class="btn-add-section" onclick="openCheckModal('estudo')">+ Adicionar item</button>
+      </div>
+      <div class="checklist-section">
+        <div class="section-title">Físico</div>
+        <div id="checks-fisico"></div>
+        <button class="btn-add-section" onclick="openCheckModal('fisico')">+ Adicionar item</button>
+      </div>
+    </div>
+
+    <!-- ── CRONOGRAMA ── -->
+    <div class="panel" id="panel-cronograma">
+      <div class="section-title">Cronograma 3–6 Meses</div>
+      <div class="section-sub">Plano estratégico para quem quer passar nos dois concursos.</div>
+      <div class="timeline" id="timeline"></div>
+      <button class="btn-add-section" style="max-width:320px" onclick="openPhaseModal()">+ Adicionar fase</button>
+    </div>
+
+    <!-- ── SIMULADO ── -->
+    <div class="panel" id="panel-simulado">
+      <div id="quiz-container"></div>
+      <div class="quiz-score" id="quiz-score">
+        <div class="big-score" id="score-display"></div>
+        <p id="score-msg"></p>
+        <button class="btn-restart" onclick="startQuiz()">Tentar novamente</button>
+      </div>
+    </div>
+
+    <!-- ── DICAS ── -->
+    <div class="panel" id="panel-dicas">
+      <div class="tips-grid" id="tips-grid"></div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /p1 -->
+
+
+<!-- ══════════════════════════════════════
+     PÁGINA 2 — ROTINA DIÁRIA
+     ══════════════════════════════════════ -->
+<div class="page p2-body" id="p2">
+
+  <div class="p2-header">
+    <div class="p2-logo">⚖ ROTINA PM</div>
+    <div class="header-right">
+      <div class="day-badge" id="date-badge">—</div>
+      <div class="clock" id="clock">00:00</div>
+    </div>
+  </div>
+
+  <div class="app">
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-label">Selecionar Dia</div>
+        <div class="days-grid" id="days-grid"></div>
+
+        <div class="sidebar-label">Resumo do Dia</div>
+        <div class="stat-mini">
+          <div class="stat-row-mini">
+            <span class="slabel">Blocos</span>
+            <span class="sval" id="sb-total" style="color:var(--gold)">0</span>
+          </div>
+          <div class="stat-row-mini">
+            <span class="slabel">Concluídos</span>
+            <span class="sval" id="sb-done" style="color:var(--green)">0</span>
+          </div>
+          <div class="stat-row-mini">
+            <span class="slabel">Estudo (h)</span>
+            <span class="sval" id="sb-hours" style="color:var(--blue)">0h</span>
+          </div>
+        </div>
+
+        <div class="sidebar-label">Hábitos — Semana</div>
+        <div class="habit-mini" id="habit-mini"></div>
+
+        <div class="sidebar-label" style="margin-top:12px">Pomodoro</div>
+        <div class="pomodoro-wrap">
+          <div class="pomo-header">
+            <span class="pomo-title">Temporizador</span>
+            <select id="pomo-mode" class="form-input form-select" style="width:auto;padding:4px 8px;font-size:10px;">
+              <option value="25">25 min foco</option>
+              <option value="50">50 min foco</option>
+              <option value="5">5 min pausa</option>
+              <option value="15">15 min pausa</option>
+            </select>
+          </div>
+          <div class="pomo-display" id="pomo-display">25:00</div>
+          <div class="pomo-controls">
+            <button class="pomo-btn" id="pomo-start" onclick="pomoToggle()">Iniciar</button>
+            <button class="pomo-btn" onclick="pomoReset()">Reset</button>
+          </div>
+          <div class="pomo-status" id="pomo-status">PRONTO</div>
+          <div class="pomo-cycles" id="pomo-cycles"></div>
+        </div>
+      </div>
+
+      <div class="motivation-box">
+        <strong>💡 FRASE DO DIA</strong>
+        <span id="motivation-text"></span>
+      </div>
+    </div><!-- /sidebar -->
+
+    <!-- Main -->
+    <div class="main">
+      <div class="main-header">
+        <div>
+          <div class="main-title">ROTINA <span id="active-day-name">SEGUNDA</span></div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="btn-secondary" onclick="openCopyModal()">📋 Copiar para</button>
+          <button class="btn-secondary" onclick="clearDay()">🗑 Limpar dia</button>
+          <button class="btn-primary"   onclick="openAddModal()">+ Adicionar Bloco</button>
+        </div>
+      </div>
+
+      <div class="day-progress-bar">
+        <span class="dpb-label">Progresso hoje</span>
+        <div class="dpb-track"><div class="dpb-fill" id="day-fill" style="width:0%"></div></div>
+        <span class="dpb-pct" id="day-pct">0%</span>
+      </div>
+
+      <div class="schedule-wrap" id="schedule"></div>
+    </div><!-- /main -->
+
+  </div><!-- /app -->
+</div><!-- /p2 -->
+
+
+<!-- ══════════════════════════════════════
+     PÁGINA 3 — BANCO DE MATERIAIS
+     ══════════════════════════════════════ -->
+<div class="page" id="p3">
+
+  <!-- Cabeçalho -->
+  <div class="banco-header">
+    <div class="banco-logo">📂 Banco de Materiais</div>
+    <div class="banco-stats">
+      <span class="banco-stat" id="banco-stat-total">0 materiais</span>
+      <span class="banco-stat" id="banco-stat-done">0 concluídos</span>
+      <span class="banco-stat" id="banco-stat-stud">0 em andamento</span>
+    </div>
+  </div>
+
+  <!-- Filtros -->
+  <div class="banco-filters">
+    <span class="filter-label">Filtrar:</span>
+    <select class="filter-select" id="filter-subject">
+      <option value="">Todas as matérias</option>
+    </select>
+    <select class="filter-select" id="filter-type">
+      <option value="">Todos os tipos</option>
+      <option value="curso">🎓 Curso</option>
+      <option value="pdf">📄 PDF</option>
+      <option value="video">🎬 Vídeo</option>
+      <option value="link">🔗 Link</option>
+      <option value="livro">📚 Livro</option>
+      <option value="anotacao">📝 Anotação</option>
+    </select>
+    <select class="filter-select" id="filter-status">
+      <option value="">Todos os status</option>
+      <option value="nao-iniciado">Não iniciado</option>
+      <option value="estudando">Estudando</option>
+      <option value="concluido">Concluído</option>
+    </select>
+    <input type="text" class="filter-search" id="filter-search" placeholder="🔍  Buscar por nome ou descrição…">
+    <button class="btn-filter-clear" onclick="clearBancoFilters()">✕ Limpar</button>
+  </div>
+
+  <!-- Grid de cards -->
+  <div class="banco-content">
+    <div class="banco-grid" id="banco-grid">
+      <!-- Populado pelo JS -->
+    </div>
+  </div>
+
+</div><!-- /p3 -->
+
+
+<!-- ══════════════════════════════════════
+     MODAIS
+     ══════════════════════════════════════ -->
+
+<!-- Modal: Adicionar / Editar Material -->
+<div class="overlay" id="overlay-mat">
+  <div class="modal modal-wide">
+    <div class="modal-head">
+      <div class="modal-title" id="mat-modal-title">ADICIONAR MATERIAL</div>
+      <button class="modal-close" onclick="closeModal('overlay-mat')">✕</button>
+    </div>
+
+    <!-- Matéria vinculada -->
+    <div class="form-row">
+      <label class="form-label">Matéria</label>
+      <select id="mat-subjectId" class="form-input form-select"></select>
+    </div>
+
+    <!-- Nome -->
+    <div class="form-row">
+      <label class="form-label">Nome do material <span style="color:var(--danger)">*</span></label>
+      <input type="text" id="mat-name" class="form-input" placeholder="Ex: Apostila Cebraspe — Português">
+    </div>
+
+    <!-- Tipo + Status lado a lado -->
+    <div class="form-row-2">
+      <div class="form-row" style="margin:0">
+        <label class="form-label">Tipo</label>
+        <select id="mat-type" class="form-input form-select">
+          <option value="curso">🎓 Curso</option>
+          <option value="pdf">📄 PDF</option>
+          <option value="video">🎬 Vídeo</option>
+          <option value="link">🔗 Link</option>
+          <option value="livro">📚 Livro</option>
+          <option value="anotacao">📝 Anotação</option>
+        </select>
+      </div>
+      <div class="form-row" style="margin:0">
+        <label class="form-label">Status</label>
+        <select id="mat-status" class="form-input form-select">
+          <option value="nao-iniciado">Não iniciado</option>
+          <option value="estudando">Estudando</option>
+          <option value="concluido">Concluído</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Link / URL -->
+    <div class="form-row">
+      <label class="form-label">Link ou URL (opcional)</label>
+      <input type="text" id="mat-link" class="form-input" placeholder="https://…  ou  nome do arquivo">
+    </div>
+
+    <!-- Descrição -->
+    <div class="form-row">
+      <label class="form-label">Descrição (opcional)</label>
+      <textarea id="mat-description" class="form-input" placeholder="Anote observações, capítulos relevantes, dificuldades…"></textarea>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('overlay-mat')">Cancelar</button>
+      <button class="btn-primary" id="mat-modal-save">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Add/Edit Bloco Rotina -->
+<div class="overlay" id="overlay-add">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title" id="modal-title-text">NOVO BLOCO</div>
+      <button class="modal-close" onclick="closeModal('overlay-add')">✕</button>
+    </div>
+    <div class="modal-tabs">
+      <button class="modal-tab active" onclick="switchModalTab('manual', this)">Manual</button>
+      <button class="modal-tab"        onclick="switchModalTab('templates', this)">Templates</button>
+    </div>
+
+    <div id="tab-manual">
+      <div class="form-row">
+        <label class="form-label">Título do bloco</label>
+        <input type="text" id="f-title" class="form-input" placeholder="Ex: Estudar Português — Interpretação de Texto">
+      </div>
+      <div class="form-row-2">
+        <div class="form-row" style="margin:0">
+          <label class="form-label">Início</label>
+          <input type="time" id="f-start" class="form-input" value="06:00">
+        </div>
+        <div class="form-row" style="margin:0">
+          <label class="form-label">Fim</label>
+          <input type="time" id="f-end" class="form-input" value="07:00">
+        </div>
+      </div>
+      <div class="form-row" style="margin-top:16px">
+        <label class="form-label">Categoria</label>
+        <div class="cat-picker">
+          <div class="cat-opt" data-cat="estudo"      onclick="selectCat(this)">📚 Estudo</div>
+          <div class="cat-opt" data-cat="revisao"     onclick="selectCat(this)">🔁 Revisão</div>
+          <div class="cat-opt" data-cat="fisico"      onclick="selectCat(this)">🏃 Físico</div>
+          <div class="cat-opt" data-cat="alimentacao" onclick="selectCat(this)">🍽 Alimentação</div>
+          <div class="cat-opt" data-cat="descanso"    onclick="selectCat(this)">😴 Descanso</div>
+          <div class="cat-opt" data-cat="outro"       onclick="selectCat(this)">📌 Outro</div>
+        </div>
+      </div>
+      <div class="form-row">
+        <label class="form-label">Anotação / Detalhe (opcional)</label>
+        <textarea id="f-note" class="form-input" placeholder="Ex: Foco em concordância verbal. Apostila CEBRASPE p.34–40."></textarea>
+      </div>
+      <div class="form-row" style="display:flex;align-items:center;gap:10px;">
+        <input type="checkbox" id="f-repeat" style="width:16px;height:16px;accent-color:var(--gold);">
+        <label for="f-repeat" class="form-label" style="margin:0;cursor:pointer;">Repetir em todos os dias da semana</label>
+      </div>
+    </div>
+
+    <div id="tab-templates" style="display:none;">
+      <div class="template-section-title">Rotinas prontas — PM-MA & PM-PI</div>
+      <div class="template-grid">
+        <div class="template-card" onclick="applyTemplate('manha')">
+          <div class="template-name">🌅 Manhã Produtiva</div>
+          <div class="template-desc">Acordar às 5h · Física · Português · Revisão<br>6 blocos · ~4h de estudo</div>
+        </div>
+        <div class="template-card" onclick="applyTemplate('tarde')">
+          <div class="template-name">🌤 Tarde de Direito</div>
+          <div class="template-desc">Constitucional + Penal + Simulado<br>5 blocos · ~3h de estudo</div>
+        </div>
+        <div class="template-card" onclick="applyTemplate('intensivo')">
+          <div class="template-name">🔥 Dia Intensivo</div>
+          <div class="template-desc">Rotina completa 5h–22h<br>~8h de estudo</div>
+        </div>
+        <div class="template-card" onclick="applyTemplate('taf')">
+          <div class="template-name">💪 Dia de TAF</div>
+          <div class="template-desc">Foco físico + revisão leve<br>6 blocos</div>
+        </div>
+        <div class="template-card" onclick="applyTemplate('revisao')">
+          <div class="template-name">🔁 Revisão Semanal</div>
+          <div class="template-desc">Revisão de toda a semana<br>4 blocos · fixação</div>
+        </div>
+        <div class="template-card" onclick="applyTemplate('simulado')">
+          <div class="template-name">📝 Dia de Simulado</div>
+          <div class="template-desc">Simulado completo + correção<br>4 blocos</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('overlay-add')">Cancelar</button>
+      <button class="btn-primary"   onclick="saveBlock()">Salvar Bloco</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Copiar Rotina -->
+<div class="overlay" id="overlay-copy">
+  <div class="modal" style="max-width:380px;">
+    <div class="modal-head">
+      <div class="modal-title">COPIAR ROTINA</div>
+      <button class="modal-close" onclick="closeModal('overlay-copy')">✕</button>
+    </div>
+    <p style="font-size:13px;color:var(--muted2);margin-bottom:18px;">
+      Copiar rotina de <strong id="copy-from-label" style="color:var(--gold)">Segunda</strong> para:
+    </p>
+    <div class="week-copy" id="week-copy-list"></div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('overlay-copy')">Cancelar</button>
+      <button class="btn-primary"   onclick="executeCopy()">Copiar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal genérico (matéria, checklist, cronograma, comparativo) -->
+<div class="overlay" id="overlay-edit">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title" id="edit-modal-title">EDITAR</div>
+      <button class="modal-close" onclick="closeModal('overlay-edit')">✕</button>
+    </div>
+    <div id="edit-modal-body"></div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('overlay-edit')">Cancelar</button>
+      <button class="btn-primary"   id="edit-modal-save">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast de feedback -->
+<div id="toast"></div>
+
+<!-- Script principal -->
+<script>
+/* ============================================================
+   SISTEMA DE ESTUDOS PM-MA & PM-PI 2026
+   app.js — Toda a lógica do painel + banco de materiais
+   ============================================================ */
+
+'use strict';
+
+// ============================================================
+// 1. BANCO DE DADOS LOCAL (LocalStorage)
+// ============================================================
+
+/**
+ * DB — interface simples para leitura/escrita no LocalStorage.
+ * Cada chave armazena um array JSON serializado.
+ */
+const DB = {
+  KEYS: {
+    subjects:  'pmdb_subjects',
+    checks:    'pmdb_checks',
+    phases:    'pmdb_phases',
+    cmpRows:   'pmdb_cmp_rows',
+    schedule:  'pmdb_schedule',
+    habits:    'pmdb_habits',
+    materials: 'pmdb_materials',   // ← banco de materiais
+    checkState:'pmdb_check_state',
+  },
+
+  /** Salva qualquer valor (serializado) */
+  save(key, value) {
+    try {
+      localStorage.setItem(key, JSON.stringify(value));
+    } catch(e) {
+      console.error('[DB] Erro ao salvar:', key, e);
+    }
+  },
+
+  /** Carrega um valor. Retorna `fallback` se não existir. */
+  load(key, fallback) {
+    try {
+      const raw = localStorage.getItem(key);
+      return raw !== null ? JSON.parse(raw) : fallback;
+    } catch(e) {
+      console.error('[DB] Erro ao carregar:', key, e);
+      return fallback;
+    }
+  },
+
+  /** Remove uma chave */
+  remove(key) {
+    localStorage.removeItem(key);
+  },
+};
+
+// ============================================================
+// 2. DADOS INICIAIS (usados apenas na primeira carga)
+// ============================================================
+
+const INITIAL_SUBJECTS = [
+  { id: 's1',  name:'Língua Portuguesa',               tags:['both'], topics:'Interpretação de texto, gramática, ortografia, concordância, redação (PM-PI)',                  progress:0 },
+  { id: 's2',  name:'História do Brasil',               tags:['both'], topics:'Brasil Colônia, Império, República, Era Vargas, Ditadura, Redemocratização',                     progress:0 },
+  { id: 's3',  name:'Geografia do Brasil',              tags:['both'], topics:'Regiões, biomas, clima, hidrografia, economia, população',                                        progress:0 },
+  { id: 's4',  name:'Noções de Informática',            tags:['both'], topics:'Windows, Word, Excel, PowerPoint, internet, segurança digital',                                   progress:0 },
+  { id: 's5',  name:'Legislação Institucional',         tags:['both'], topics:'Estatuto PM-MA / PM-PI, hierarquia, disciplina, direitos e deveres do policial militar',           progress:0 },
+  { id: 's6',  name:'Conhecimentos Gerais / Atualidades',tags:['both'],topics:'Segurança pública, política, economia, meio ambiente, notícias recentes',                          progress:0 },
+  { id: 's7',  name:'Raciocínio Lógico e Quantitativo', tags:['ma'],  topics:'Proposições, tabela-verdade, inferências, sequências, porcentagem',                                progress:0 },
+  { id: 's8',  name:'História do Maranhão',              tags:['ma'],  topics:'Pré-história, colonização, Balaiada, República, personagens históricos',                           progress:0 },
+  { id: 's9',  name:'Geografia do Maranhão',             tags:['ma'],  topics:'Regiões, municípios, hidrografia, economia, Baixada, Cerrado, Litoral',                            progress:0 },
+  { id: 's10', name:'Matemática',                        tags:['pi'],  topics:'Operações básicas, frações, porcentagem, regra de três, área, geometria básica',                  progress:0 },
+  { id: 's11', name:'Legislação do Piauí',               tags:['pi'],  topics:'Constituição do PI, Estatuto PM-PI, Lei de Organização Básica, disciplina',                       progress:0 },
+  { id: 's12', name:'Redação Dissertativa',              tags:['pi'],  topics:'Estrutura de texto, argumentação, coesão, coerência, temas sociais/políticos',                    progress:0 },
+];
+
+const INITIAL_CHECKS = {
+  docs:[
+    { id:'d1', text:'Verificar requisito de idade: PM-MA (até 30 anos) e PM-PI (até 35 anos)', tag:'Urgente' },
+    { id:'d2', text:'Conferir requisito de altura: PM-MA homens 1,65m / mulheres 1,60m | PM-PI 1,60m / 1,55m', tag:'Físico' },
+    { id:'d3', text:'CNH categoria A ou B (PM-MA) e AB (PM-PI) — providenciar se não tiver', tag:'Documento' },
+    { id:'d4', text:'Separar certificado de conclusão do Ensino Médio', tag:'Documento' },
+    { id:'d5', text:'Acompanhar publicação do edital PM-MA (previsão: até abril/2026)', tag:'Calendário' },
+    { id:'d6', text:'Acompanhar publicação do edital PM-PI (previsão: até junho/2026)', tag:'Calendário' },
+  ],
+  estudo:[
+    { id:'e1', text:'Baixar provas antigas: PM-MA 2017 (Cebraspe) e PM-PI 2021 (NUCEPE)', tag:'Material' },
+    { id:'e2', text:'Treinar questões no estilo Cebraspe (certo/errado, ponto negativo) para PM-MA', tag:'PM-MA' },
+    { id:'e3', text:'Praticar redação dissertativa 20–30 linhas para PM-PI', tag:'PM-PI' },
+    { id:'e4', text:'Estudar História e Geografia do Maranhão especificamente', tag:'PM-MA' },
+    { id:'e5', text:'Estudar Legislação do Estado do Piauí', tag:'PM-PI' },
+    { id:'e6', text:'Fazer simulado completo por semana a partir do 2º mês', tag:'Prática' },
+  ],
+  fisico:[
+    { id:'f1', text:'Verificar os testes do TAF em ambos os editais (corrida, barra/flexão, abdominal)', tag:'TAF' },
+    { id:'f2', text:'Iniciar treino aeróbico: corrida 2–3x/semana', tag:'Condicionamento' },
+    { id:'f3', text:'Treinar força: flexão, abdominal, barra fixa (PM-MA exige barra)', tag:'Força' },
+    { id:'f4', text:'Registrar tempos e repetições atuais para acompanhar evolução', tag:'Diagnóstico' },
+    { id:'f5', text:'Marcar check-up médico (exame médico é eliminatório em ambos)', tag:'Saúde' },
+    { id:'f6', text:'Manter treino físico consistente — não pausar nos períodos de prova teórica!', tag:'Disciplina' },
+  ],
+};
+
+const INITIAL_PHASES = [
+  { id:'p1', label:'Mês 1–2', title:'Base e Diagnóstico',   desc:'Estude o núcleo comum aos dois concursos: Português, História e Geografia do Brasil, Informática e Atualidades. Resolva provas antigas para sentir o estilo de cada banca. Inicie o treino físico.',   items:['Português','História BR','Geografia BR','Informática','Treino físico leve','Provas PM-MA 2017 e PM-PI 2021'] },
+  { id:'p2', label:'Mês 2–3', title:'Conteúdo Específico',  desc:'Adicione as matérias exclusivas: História/Geografia do MA, Legislação do PI, Matemática (PM-PI) e Raciocínio Lógico (PM-MA). Comece os primeiros simulados por matéria.',                               items:['Hist./Geo. Maranhão','Legislação PI','Matemática','Raciocínio Lógico','Legislação Institucional','1 simulado/semana'] },
+  { id:'p3', label:'Mês 3–4', title:'Prática Intensiva',    desc:'Simulados completos semanais no formato de cada banca. Pratique redação dissertativa regularmente para PM-PI. Identifique os erros e volte à teoria. Intensifique o treino físico.',                         items:['Simulados Cebraspe (C/E)','Simulados NUCEPE (múltipl.)','Redação 2x/semana','TAF progressivo','Revisão por matéria'] },
+  { id:'p4', label:'Mês 4–5', title:'Revisão e Ajustes',    desc:'Priorize os erros dos simulados. Revise Legislação Institucional de ambos os estados com atenção. Mantenha o ritmo físico. Treine no horário das provas.',                                               items:['Revisão geral','Legislação PM-MA e PM-PI','Questões por bloco','Redação final'] },
+  { id:'p5', label:'Mês 5–6', title:'Reta Final',           desc:'Ritmo leve, sem sobrecarga. Releia fichamentos, resolva questões rápidas por assunto e cuide do sono. Prepare a documentação completa para inscrição em ambos.',                                           items:['Revisão leve','Descanso estratégico','Documentação pronta','Confiança!'] },
+];
+
+const INITIAL_CMP = [
+  ['Vagas previstas','1.000+ (Soldado)','1.000 (500 imediatas + 500 CR)'],
+  ['Edital previsto','Até abril/2026','Até junho/2026'],
+  ['Banca','A definir (último: Cebraspe)','NUCEPE (confirmada)'],
+  ['Escolaridade','Ensino Médio','Ensino Médio'],
+  ['Idade máxima','30 anos (inscrição)','35 anos (posse)'],
+  ['Altura mínima H/M','1,65m / 1,60m','1,60m / 1,55m'],
+  ['CNH','Categoria A ou B','Categoria AB'],
+  ['Provas objetivas','120 questões (C/E) — 5h','60 questões (múltipla escolha) + Redação — 5h'],
+  ['Matérias cobradas','Português · Raciocínio Lógico · História BR/MA · Geografia BR/MA · Informática · Legislação','Português · Matemática · Conhecimentos Gerais · Informática · Legislação Estadual'],
+  ['Redação','Não cobrada no último edital','Sim (20–30 linhas, dissertativa)'],
+  ['TAF','Eliminatória (barra, corrida…)','Eliminatória (corrida, abdominal…)'],
+  ['Psicotécnico','Sim, eliminatório','Sim, eliminatório'],
+  ['Investigação social','Sim, eliminatória','Sim, eliminatória'],
+  ['Salário atual (Soldado)','R$ 5.252,34','R$ 5.159,76'],
+];
+
+// ============================================================
+// 3. ESTADO DA APLICAÇÃO
+// ============================================================
+
+/** Carrega dados salvos ou usa os valores iniciais */
+let subjects   = DB.load(DB.KEYS.subjects,  INITIAL_SUBJECTS);
+let checks     = DB.load(DB.KEYS.checks,    INITIAL_CHECKS);
+let phases     = DB.load(DB.KEYS.phases,    INITIAL_PHASES);
+let cmpRows    = DB.load(DB.KEYS.cmpRows,   INITIAL_CMP);
+let checkState = DB.load(DB.KEYS.checkState, {});
+
+/** materials: array de objetos:
+ * { id, subjectId, name, type, link, description, status, dateAdded }
+ */
+let materials = DB.load(DB.KEYS.materials, []);
+
+/** Estado da rotina diária */
+const DAYS     = ['SEG','TER','QUA','QUI','SEX','SAB','DOM'];
+const DAY_NAMES= ['Segunda','Terça','Quarta','Quinta','Sexta','Sábado','Domingo'];
+const CATS     = { estudo:'Estudo', revisao:'Revisão', fisico:'Físico', alimentacao:'Alimentação', descanso:'Descanso', outro:'Outro' };
+const HABITS   = ['Correr/treinar','Estudar +4h','Ler edital','Redação (PI)','Revisão noturna'];
+
+const defaultSchedule = { 0:[], 1:[], 2:[], 3:[], 4:[], 5:[], 6:[] };
+const defaultHabits   = {};
+HABITS.forEach(h => { defaultHabits[h] = [false,false,false,false,false,false,false]; });
+
+let rotinaState = {
+  activeDay:    0,
+  schedule:     DB.load(DB.KEYS.schedule, defaultSchedule),
+  habits:       DB.load(DB.KEYS.habits,   defaultHabits),
+  editId:       null,
+  selectedCat:  'estudo',
+  pomoCycles:   0,
+  pomoRunning:  false,
+  pomoInterval: null,
+  pomoSeconds:  0,
+};
+
+// ============================================================
+// 4. HELPERS
+// ============================================================
+
+/** Gera um ID único */
+function uid() {
+  return 'id_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 7);
+}
+
+/** Formata data para DD/MM/YYYY */
+function fmtDate(iso) {
+  if (!iso) return '—';
+  const d = new Date(iso);
+  if (isNaN(d)) return iso;
+  return d.toLocaleDateString('pt-BR');
+}
+
+/** Mapa de tipo → emoji */
+const TYPE_ICON = {
+  curso:    '🎓',
+  pdf:      '📄',
+  video:    '🎬',
+  link:     '🔗',
+  livro:    '📚',
+  anotacao: '📝',
+};
+
+/** Status: ciclo de alteração */
+const STATUS_CYCLE = ['nao-iniciado', 'estudando', 'concluido'];
+const STATUS_LABEL = { 'nao-iniciado':'Não iniciado', 'estudando':'Estudando', 'concluido':'Concluído' };
+
+/** Mostra toast de confirmação */
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = '✓ ' + msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2800);
+}
+
+/** Abre / fecha overlay */
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function openModal(id)  { document.getElementById(id).classList.add('open'); }
+
+// ============================================================
+// 5. PAINEL 1 — MATÉRIAS
+// ============================================================
+
+/**
+ * Retorna os materiais de uma matéria pelo subjectId
+ */
+function getMaterialsBySubject(sid) {
+  return materials.filter(m => m.subjectId === sid);
+}
+
+/**
+ * Renderiza o grid completo de matérias
+ */
+function renderSubjects() {
+  const grid = document.getElementById('subject-grid');
+  grid.innerHTML = subjects.map((s, i) => {
+    const tagHtml = s.tags.map(t =>
+      t === 'both' ? '<span class="tag-both">Ambos</span>'
+      : t === 'ma' ? '<span class="tag-ma">PM-MA</span>'
+      : '<span class="tag-pi">PM-PI</span>'
+    ).join('');
+    const mats = getMaterialsBySubject(s.id);
+    const matHtml = renderMaterialsInCard(s.id, mats);
+    return `
+    <div class="subject-card">
+      <div class="subject-header">
+        <div class="subject-name">${s.name}</div>
+        <div style="display:flex;gap:4px;">
+          <button class="btn-edit-inline" onclick="openSubjEditModal(${i})">✏</button>
+          <button class="btn-edit-inline del" onclick="deleteSubject(${i})">✕</button>
+        </div>
+      </div>
+      <div class="subject-tags">${tagHtml}</div>
+      <div class="subject-topics">${s.topics}</div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="bar-${i}" style="width:${s.progress}%"></div>
+      </div>
+      <div class="progress-controls">
+        <span class="progress-pct" id="pct-${i}">${s.progress}%</span>
+        <div style="display:flex;gap:5px;">
+          <button class="btn-sm" onclick="addProgress(${i},-25)">−</button>
+          <button class="btn-sm" onclick="addProgress(${i},25)">+25%</button>
+        </div>
+      </div>
+      <!-- SEÇÃO DE MATERIAIS -->
+      <div class="materials-section">
+        <div class="materials-section-title">
+          <span>📂 Materiais de Estudo</span>
+          <span class="materials-count">${mats.length}</span>
+        </div>
+        ${matHtml}
+        <button class="btn-add-mat" onclick="openMatModal('${s.id}')">+ Adicionar Material</button>
+      </div>
+    </div>`;
+  }).join('');
+  updateStats();
+}
+
+/**
+ * Renderiza a lista de materiais dentro de um card de matéria
+ */
+function renderMaterialsInCard(sid, mats) {
+  if (!mats.length) return `<div style="font-size:11px;color:var(--muted);text-align:center;padding:8px 0;">Nenhum material cadastrado ainda.</div>`;
+  return `<div class="mat-list">` + mats.map(m => `
+    <div class="mat-item" id="mat-item-${m.id}">
+      <span class="mat-icon">${TYPE_ICON[m.type] || '📌'}</span>
+      <div class="mat-info">
+        <div class="mat-name" title="${m.name}">${m.name}</div>
+        <div class="mat-meta">
+          <span class="mat-type-tag type-${m.type}">${m.type}</span>
+          <span class="mat-status-tag status-${m.status}" onclick="cycleMatStatus('${m.id}')" title="Clique para alterar status">${STATUS_LABEL[m.status]}</span>
+        </div>
+      </div>
+      <div class="mat-actions">
+        ${m.link ? `<button class="btn-icon open" onclick="openMatLink('${m.id}')" title="Abrir">↗</button>` : ''}
+        <button class="btn-icon" onclick="openMatEditModal('${m.id}')" title="Editar">✏</button>
+        <button class="btn-icon delete" onclick="deleteMaterial('${m.id}')" title="Excluir">✕</button>
+      </div>
+    </div>`).join('') + `</div>`;
+}
+
+function addProgress(i, delta) {
+  subjects[i].progress = Math.max(0, Math.min(100, subjects[i].progress + delta));
+  DB.save(DB.KEYS.subjects, subjects);
+  document.getElementById('bar-'+i).style.width  = subjects[i].progress + '%';
+  document.getElementById('pct-'+i).textContent  = subjects[i].progress + '%';
+  updateStats();
+}
+
+function updateStats() {
+  const avg = subjects.length ? Math.round(subjects.reduce((a,s) => a+s.progress, 0) / subjects.length) : 0;
+  document.getElementById('stat-prog').textContent = avg + '%';
+  const total = materials.length;
+  const done  = materials.filter(m => m.status === 'concluido').length;
+  document.getElementById('stat-mat-total').textContent = total;
+  document.getElementById('stat-mat-done').textContent  = done;
+}
+
+function deleteSubject(i) {
+  if (!confirm('Remover esta matéria? Os materiais vinculados também serão excluídos.')) return;
+  const sid = subjects[i].id;
+  subjects.splice(i, 1);
+  materials = materials.filter(m => m.subjectId !== sid);
+  DB.save(DB.KEYS.subjects,  subjects);
+  DB.save(DB.KEYS.materials, materials);
+  renderSubjects();
+  renderBanco();
+  toast('Matéria removida');
+}
+
+// ── Modais de matéria ──
+
+function openSubjModal() {
+  document.getElementById('edit-modal-title').textContent = 'NOVA MATÉRIA';
+  document.getElementById('edit-modal-body').innerHTML = subjectFormHtml();
+  document.getElementById('edit-modal-save').onclick = () => {
+    const name   = document.getElementById('em-name').value.trim();
+    const tag    = document.getElementById('em-tag').value;
+    const topics = document.getElementById('em-topics').value.trim();
+    if (!name) return;
+    subjects.push({ id: uid(), name, tags:[tag], topics, progress:0 });
+    DB.save(DB.KEYS.subjects, subjects);
+    renderSubjects();
+    closeModal('overlay-edit');
+    toast('Matéria adicionada');
+  };
+  openModal('overlay-edit');
+}
+
+function openSubjEditModal(i) {
+  const s = subjects[i];
+  document.getElementById('edit-modal-title').textContent = 'EDITAR MATÉRIA';
+  document.getElementById('edit-modal-body').innerHTML = subjectFormHtml(s);
+  document.getElementById('edit-modal-save').onclick = () => {
+    subjects[i].name   = document.getElementById('em-name').value.trim();
+    subjects[i].tags   = [document.getElementById('em-tag').value];
+    subjects[i].topics = document.getElementById('em-topics').value.trim();
+    DB.save(DB.KEYS.subjects, subjects);
+    renderSubjects();
+    closeModal('overlay-edit');
+    toast('Matéria atualizada');
+  };
+  openModal('overlay-edit');
+}
+
+function subjectFormHtml(s = {}) {
+  return `
+    <div class="form-row">
+      <label class="form-label">Nome</label>
+      <input id="em-name" class="form-input" value="${s.name||''}" placeholder="Ex: Direito Constitucional">
+    </div>
+    <div class="form-row">
+      <label class="form-label">Concurso</label>
+      <select id="em-tag" class="form-input form-select">
+        <option value="both" ${(s.tags||['both'])[0]==='both'?'selected':''}>Ambos</option>
+        <option value="ma"   ${(s.tags||[])[0]==='ma'?'selected':''}>PM-MA</option>
+        <option value="pi"   ${(s.tags||[])[0]==='pi'?'selected':''}>PM-PI</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <label class="form-label">Tópicos</label>
+      <textarea id="em-topics" class="form-input" placeholder="Tópicos cobrados…">${s.topics||''}</textarea>
+    </div>`;
+}
+
+// ============================================================
+// 6. BANCO DE MATERIAIS — CRUD
+// ============================================================
+
+/**
+ * Abre o modal para adicionar novo material
+ * @param {string} subjectId  — ID da matéria (pré-selecionado)
+ */
+function openMatModal(subjectId) {
+  document.getElementById('mat-modal-title').textContent = 'ADICIONAR MATERIAL';
+  populateMatForm({}, subjectId);
+  document.getElementById('mat-modal-save').onclick = () => saveMat(null, subjectId);
+  openModal('overlay-mat');
+}
+
+/**
+ * Abre o modal para editar material existente
+ */
+function openMatEditModal(id) {
+  const m = materials.find(x => x.id === id);
+  if (!m) return;
+  document.getElementById('mat-modal-title').textContent = 'EDITAR MATERIAL';
+  populateMatForm(m, m.subjectId);
+  document.getElementById('mat-modal-save').onclick = () => saveMat(id, m.subjectId);
+  openModal('overlay-mat');
+}
+
+/**
+ * Preenche o formulário de material
+ */
+function populateMatForm(m, subjectId) {
+  // Preenche select de matéria
+  const selSub = document.getElementById('mat-subjectId');
+  selSub.innerHTML = subjects.map(s =>
+    `<option value="${s.id}" ${s.id === (m.subjectId || subjectId) ? 'selected' : ''}>${s.name}</option>`
+  ).join('');
+  document.getElementById('mat-name').value        = m.name        || '';
+  document.getElementById('mat-type').value        = m.type        || 'curso';
+  document.getElementById('mat-link').value        = m.link        || '';
+  document.getElementById('mat-description').value = m.description || '';
+  document.getElementById('mat-status').value      = m.status      || 'nao-iniciado';
+}
+
+/**
+ * Salva (cria ou edita) um material
+ * @param {string|null} editId — null para criar novo
+ */
+function saveMat(editId, originalSubjectId) {
+  const name        = document.getElementById('mat-name').value.trim();
+  const subjectId   = document.getElementById('mat-subjectId').value;
+  const type        = document.getElementById('mat-type').value;
+  const link        = document.getElementById('mat-link').value.trim();
+  const description = document.getElementById('mat-description').value.trim();
+  const status      = document.getElementById('mat-status').value;
+
+  if (!name) {
+    document.getElementById('mat-name').focus();
+    return;
+  }
+
+  if (editId) {
+    // Edição
+    const idx = materials.findIndex(m => m.id === editId);
+    if (idx !== -1) {
+      materials[idx] = { ...materials[idx], subjectId, name, type, link, description, status };
+    }
+    toast('Material atualizado');
+  } else {
+    // Criação
+    materials.push({
+      id:          uid(),
+      subjectId,
+      name,
+      type,
+      link,
+      description,
+      status,
+      dateAdded:   new Date().toISOString(),
+    });
+    toast('Material adicionado');
+  }
+
+  DB.save(DB.KEYS.materials, materials);
+  closeModal('overlay-mat');
+  renderSubjects();
+  renderBanco();
+}
+
+/**
+ * Exclui um material pelo ID
+ */
+function deleteMaterial(id) {
+  if (!confirm('Excluir este material?')) return;
+  materials = materials.filter(m => m.id !== id);
+  DB.save(DB.KEYS.materials, materials);
+  renderSubjects();
+  renderBanco();
+  toast('Material excluído');
+}
+
+/**
+ * Alterna o status de um material (ciclo)
+ */
+function cycleMatStatus(id) {
+  const m = materials.find(x => x.id === id);
+  if (!m) return;
+  const idx = STATUS_CYCLE.indexOf(m.status);
+  m.status = STATUS_CYCLE[(idx + 1) % STATUS_CYCLE.length];
+  DB.save(DB.KEYS.materials, materials);
+  renderSubjects();
+  renderBanco();
+  toast('Status: ' + STATUS_LABEL[m.status]);
+}
+
+/**
+ * Abre o link de um material
+ */
+function openMatLink(id) {
+  const m = materials.find(x => x.id === id);
+  if (m && m.link) {
+    const url = m.link.startsWith('http') ? m.link : 'https://' + m.link;
+    window.open(url, '_blank', 'noopener');
+  }
+}
+
+// ============================================================
+// 7. PAINEL 3 — BANCO DE MATERIAIS
+// ============================================================
+
+/** Estado dos filtros do banco */
+const bancoFilter = { subject: '', type: '', status: '', search: '' };
+
+/**
+ * Renderiza o painel Banco de Materiais com filtros aplicados
+ */
+function renderBanco() {
+  // Atualiza selects de filtro
+  const fSub = document.getElementById('filter-subject');
+  if (fSub) {
+    const currentVal = fSub.value;
+    fSub.innerHTML = `<option value="">Todas as matérias</option>` +
+      subjects.map(s => `<option value="${s.id}" ${s.id === currentVal ? 'selected':''}>${s.name}</option>`).join('');
+  }
+
+  // Aplica filtros
+  let result = [...materials];
+  if (bancoFilter.subject) result = result.filter(m => m.subjectId === bancoFilter.subject);
+  if (bancoFilter.type)    result = result.filter(m => m.type      === bancoFilter.type);
+  if (bancoFilter.status)  result = result.filter(m => m.status    === bancoFilter.status);
+  if (bancoFilter.search) {
+    const q = bancoFilter.search.toLowerCase();
+    result = result.filter(m =>
+      m.name.toLowerCase().includes(q) ||
+      (m.description || '').toLowerCase().includes(q)
+    );
+  }
+
+  // Stats do banco
+  const totalAll = materials.length;
+  const doneAll  = materials.filter(m => m.status === 'concluido').length;
+  const studAll  = materials.filter(m => m.status === 'estudando').length;
+  document.getElementById('banco-stat-total').textContent = `${totalAll} materiais`;
+  document.getElementById('banco-stat-done').textContent  = `${doneAll} concluídos`;
+  document.getElementById('banco-stat-stud').textContent  = `${studAll} em andamento`;
+
+  const grid = document.getElementById('banco-grid');
+  if (!result.length) {
+    grid.innerHTML = `
+      <div class="banco-empty" style="grid-column:1/-1">
+        <div class="banco-empty-icon">📭</div>
+        <div class="banco-empty-title">Nenhum material encontrado</div>
+        <div class="banco-empty-sub">Adicione materiais através dos cards de matéria no Painel de Estudos, ou limpe os filtros aplicados.</div>
+      </div>`;
+    return;
+  }
+
+  // Ordena por data de inclusão (mais recente primeiro)
+  result.sort((a, b) => new Date(b.dateAdded) - new Date(a.dateAdded));
+
+  grid.innerHTML = result.map(m => {
+    const subj = subjects.find(s => s.id === m.subjectId);
+    return `
+    <div class="banco-card">
+      <div class="banco-card-top">
+        <div class="banco-card-icon">${TYPE_ICON[m.type] || '📌'}</div>
+        <div class="banco-card-info">
+          <div class="banco-card-name">${m.name}</div>
+          <div class="banco-card-tags">
+            <span class="mat-type-tag type-${m.type}">${m.type}</span>
+            <span class="mat-status-tag status-${m.status}" onclick="cycleMatStatus('${m.id}')" title="Clique para alterar status">${STATUS_LABEL[m.status]}</span>
+            ${subj ? `<span class="banco-materia-tag">${subj.name}</span>` : ''}
+          </div>
+        </div>
+      </div>
+      ${m.description ? `<div class="banco-card-desc">${m.description}</div>` : ''}
+      <div class="banco-card-footer">
+        <span class="banco-card-date">Adicionado: ${fmtDate(m.dateAdded)}</span>
+        <div class="banco-card-actions">
+          ${m.link ? `<button class="btn-icon open" onclick="openMatLink('${m.id}')" title="Abrir link">↗</button>` : ''}
+          <button class="btn-icon" onclick="openMatEditModal('${m.id}')" title="Editar">✏</button>
+          <button class="btn-icon delete" onclick="deleteMaterial('${m.id}')" title="Excluir">✕</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  updateStats();
+}
+
+// ── Eventos de filtro ──
+function applyBancoFilter() {
+  bancoFilter.subject = document.getElementById('filter-subject').value;
+  bancoFilter.type    = document.getElementById('filter-type').value;
+  bancoFilter.status  = document.getElementById('filter-status').value;
+  bancoFilter.search  = document.getElementById('filter-search').value;
+  renderBanco();
+}
+
+function clearBancoFilters() {
+  ['filter-subject','filter-type','filter-status','filter-search'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  bancoFilter.subject = '';
+  bancoFilter.type    = '';
+  bancoFilter.status  = '';
+  bancoFilter.search  = '';
+  renderBanco();
+}
+
+// ============================================================
+// 8. CHECKLIST
+// ============================================================
+
+function renderChecks() {
+  ['docs','estudo','fisico'].forEach(group => {
+    document.getElementById('checks-'+group).innerHTML = checks[group].map((item, i) => `
+      <div class="check-item ${checkState[group+'-'+i] ? 'done' : ''}" id="check-${group}-${i}">
+        <div class="check-box" id="box-${group}-${i}" onclick="toggleCheck('${group}',${i})">${checkState[group+'-'+i] ? '✓' : ''}</div>
+        <div style="flex:1;cursor:pointer;" onclick="toggleCheck('${group}',${i})">
+          <div class="check-text">${item.text}</div>
+          <div class="check-tag">${item.tag}</div>
+        </div>
+        <div style="display:flex;gap:4px;flex-shrink:0;">
+          <button class="btn-edit-inline" onclick="openCheckEditModal('${group}',${i})">✏</button>
+          <button class="btn-edit-inline del" onclick="deleteCheck('${group}',${i})">✕</button>
+        </div>
+      </div>`).join('');
+  });
+  updateCheckStats();
+}
+
+function toggleCheck(g, i) {
+  const k = g + '-' + i;
+  checkState[k] = !checkState[k];
+  DB.save(DB.KEYS.checkState, checkState);
+  const el = document.getElementById('check-' + k);
+  const bx = document.getElementById('box-' + k);
+  el.classList.toggle('done', checkState[k]);
+  bx.textContent = checkState[k] ? '✓' : '';
+  updateCheckStats();
+}
+
+function updateCheckStats() {
+  const done  = Object.values(checkState).filter(Boolean).length;
+  const total = checks.docs.length + checks.estudo.length + checks.fisico.length;
+  document.getElementById('stat-checks').textContent       = done;
+  document.getElementById('stat-checks-total').textContent = 'de ' + total + ' itens';
+}
+
+function deleteCheck(g, i) {
+  if (!confirm('Remover este item?')) return;
+  checks[g].splice(i, 1);
+  DB.save(DB.KEYS.checks, checks);
+  renderChecks();
+}
+
+function openCheckModal(group) {
+  document.getElementById('edit-modal-title').textContent = 'NOVO ITEM';
+  document.getElementById('edit-modal-body').innerHTML = checkFormHtml();
+  document.getElementById('edit-modal-save').onclick = () => {
+    const text = document.getElementById('em-text').value.trim();
+    const tag  = document.getElementById('em-tag2').value.trim() || 'Geral';
+    if (!text) return;
+    checks[group].push({ id: uid(), text, tag });
+    DB.save(DB.KEYS.checks, checks);
+    renderChecks();
+    closeModal('overlay-edit');
+    toast('Item adicionado');
+  };
+  openModal('overlay-edit');
+}
+
+function openCheckEditModal(group, i) {
+  const item = checks[group][i];
+  document.getElementById('edit-modal-title').textContent = 'EDITAR ITEM';
+  document.getElementById('edit-modal-body').innerHTML = checkFormHtml(item);
+  document.getElementById('edit-modal-save').onclick = () => {
+    checks[group][i].text = document.getElementById('em-text').value.trim();
+    checks[group][i].tag  = document.getElementById('em-tag2').value.trim();
+    DB.save(DB.KEYS.checks, checks);
+    renderChecks();
+    closeModal('overlay-edit');
+    toast('Item atualizado');
+  };
+  openModal('overlay-edit');
+}
+
+function checkFormHtml(item = {}) {
+  return `
+    <div class="form-row">
+      <label class="form-label">Texto</label>
+      <input id="em-text" class="form-input" value="${item.text||''}" placeholder="Descreva a tarefa…">
+    </div>
+    <div class="form-row">
+      <label class="form-label">Tag</label>
+      <input id="em-tag2" class="form-input" value="${item.tag||''}" placeholder="Ex: Urgente, PM-MA…">
+    </div>`;
+}
+
+// ============================================================
+// 9. CRONOGRAMA
+// ============================================================
+
+function renderTimeline() {
+  document.getElementById('timeline').innerHTML = phases.map((p, pi) => `
+    <div class="timeline-phase">
+      <div class="timeline-dot"></div>
+      <div class="phase-label">${p.label}</div>
+      <div class="phase-title">${p.title}</div>
+      <div class="phase-desc">${p.desc}</div>
+      <div class="phase-items">${p.items.map(t => `<span class="phase-tag">${t}</span>`).join('')}</div>
+      <div class="edit-row">
+        <button class="btn-edit-inline" onclick="openPhaseEditModal(${pi})">✏ Editar</button>
+        <button class="btn-edit-inline del" onclick="deletePhase(${pi})">✕ Remover</button>
+      </div>
+    </div>`).join('');
+}
+
+function deletePhase(i) {
+  if (!confirm('Remover esta fase?')) return;
+  phases.splice(i, 1);
+  DB.save(DB.KEYS.phases, phases);
+  renderTimeline();
+}
+
+function openPhaseModal() {
+  document.getElementById('edit-modal-title').textContent = 'NOVA FASE';
+  document.getElementById('edit-modal-body').innerHTML = phaseFormHtml();
+  document.getElementById('edit-modal-save').onclick = () => {
+    const p = readPhaseForm();
+    if (!p.title) return;
+    phases.push({ id: uid(), ...p });
+    DB.save(DB.KEYS.phases, phases);
+    renderTimeline();
+    closeModal('overlay-edit');
+    toast('Fase adicionada');
+  };
+  openModal('overlay-edit');
+}
+
+function openPhaseEditModal(i) {
+  const p = phases[i];
+  document.getElementById('edit-modal-title').textContent = 'EDITAR FASE';
+  document.getElementById('edit-modal-body').innerHTML = phaseFormHtml(p);
+  document.getElementById('edit-modal-save').onclick = () => {
+    const updated = readPhaseForm();
+    Object.assign(phases[i], updated);
+    DB.save(DB.KEYS.phases, phases);
+    renderTimeline();
+    closeModal('overlay-edit');
+    toast('Fase atualizada');
+  };
+  openModal('overlay-edit');
+}
+
+function phaseFormHtml(p = {}) {
+  return `
+    <div class="form-row">
+      <label class="form-label">Período (ex: Mês 6–7)</label>
+      <input id="em-label" class="form-input" value="${p.label||''}" placeholder="Mês X–Y">
+    </div>
+    <div class="form-row">
+      <label class="form-label">Título</label>
+      <input id="em-ptitle" class="form-input" value="${p.title||''}" placeholder="Nome da fase">
+    </div>
+    <div class="form-row">
+      <label class="form-label">Descrição</label>
+      <textarea id="em-desc" class="form-input" placeholder="Descreva o foco desta fase…">${p.desc||''}</textarea>
+    </div>
+    <div class="form-row">
+      <label class="form-label">Itens (separados por vírgula)</label>
+      <input id="em-items" class="form-input" value="${(p.items||[]).join(', ')}" placeholder="Ex: Revisão, Simulados, TAF">
+    </div>`;
+}
+
+function readPhaseForm() {
+  return {
+    label: document.getElementById('em-label').value.trim(),
+    title: document.getElementById('em-ptitle').value.trim(),
+    desc:  document.getElementById('em-desc').value.trim(),
+    items: document.getElementById('em-items').value.split(',').map(s => s.trim()).filter(Boolean),
+  };
+}
+
+// ============================================================
+// 10. COMPARATIVO
+// ============================================================
+
+function renderCmpTable() {
+  document.getElementById('cmp-tbody').innerHTML = cmpRows.map((r, i) => `
+    <tr>
+      <td>${r[0]}</td>
+      <td>${r[1]}</td>
+      <td>${r[2]}</td>
+      <td style="white-space:nowrap;width:64px;">
+        <button class="btn-edit-inline" style="margin-right:3px" onclick="openCmpEditModal(${i})">✏</button>
+        <button class="btn-edit-inline del" onclick="deleteCmpRow(${i})">✕</button>
+      </td>
+    </tr>`).join('');
+}
+
+function deleteCmpRow(i) {
+  if (!confirm('Remover esta linha?')) return;
+  cmpRows.splice(i, 1);
+  DB.save(DB.KEYS.cmpRows, cmpRows);
+  renderCmpTable();
+}
+
+function openCmpModal() {
+  document.getElementById('edit-modal-title').textContent = 'NOVA LINHA';
+  document.getElementById('edit-modal-body').innerHTML = cmpFormHtml();
+  document.getElementById('edit-modal-save').onclick = () => {
+    const row = readCmpForm();
+    if (!row[0]) return;
+    cmpRows.push(row);
+    DB.save(DB.KEYS.cmpRows, cmpRows);
+    renderCmpTable();
+    closeModal('overlay-edit');
+    toast('Linha adicionada');
+  };
+  openModal('overlay-edit');
+}
+
+function openCmpEditModal(i) {
+  const r = cmpRows[i];
+  document.getElementById('edit-modal-title').textContent = 'EDITAR LINHA';
+  document.getElementById('edit-modal-body').innerHTML = cmpFormHtml(r);
+  document.getElementById('edit-modal-save').onclick = () => {
+    cmpRows[i] = readCmpForm();
+    DB.save(DB.KEYS.cmpRows, cmpRows);
+    renderCmpTable();
+    closeModal('overlay-edit');
+    toast('Linha atualizada');
+  };
+  openModal('overlay-edit');
+}
+
+function cmpFormHtml(r = []) {
+  return `
+    <div class="form-row"><label class="form-label">Critério</label><input id="em-c0" class="form-input" value="${r[0]||''}" placeholder="Ex: Idioma"></div>
+    <div class="form-row"><label class="form-label">PM-MA</label><input id="em-c1" class="form-input" value="${r[1]||''}" placeholder="Valor PM-MA"></div>
+    <div class="form-row"><label class="form-label">PM-PI</label><input id="em-c2" class="form-input" value="${r[2]||''}" placeholder="Valor PM-PI"></div>`;
+}
+
+function readCmpForm() {
+  return [
+    document.getElementById('em-c0').value.trim(),
+    document.getElementById('em-c1').value.trim(),
+    document.getElementById('em-c2').value.trim(),
+  ];
+}
+
+// ============================================================
+// 11. QUIZ / SIMULADO
+// ============================================================
+
+const questions = [
+  { q:'Segundo a Constituição Federal de 1988, a segurança pública é dever do Estado e direito e responsabilidade de quem?', opts:['Somente dos cidadãos','De todos','Apenas das forças policiais','Apenas dos governos estaduais'], answer:1, source:'both', explain:'Art. 144 CF/88: "A segurança pública, dever do Estado, direito e responsabilidade de todos…"' },
+  { q:'(PM-MA/Cebraspe) A Polícia Militar é considerada força auxiliar e reserva do Exército Brasileiro.', opts:['CERTO','ERRADO'], answer:0, source:'ma', explain:'CERTO. Art. 144, §6º da CF/88: as PMs são forças auxiliares e reserva do Exército.' },
+  { q:'(PM-PI) Qual a palavra com ERRO de ortografia?', opts:['Exceção','Excessão','Acepção','Concepção'], answer:1, source:'pi', explain:'"Excessão" está errado. O correto é "exceção".' },
+  { q:'Nas instituições policiais militares, hierarquia e disciplina são:', opts:['Sugestões operacionais','Bases institucionais das PMs','Regras válidas só em operações','Normas externas federais'], answer:1, source:'both', explain:'Hierarquia e disciplina são as bases institucionais das PMs.' },
+  { q:'(PM-PI) A estrutura básica do texto dissertativo é:', opts:['Introdução e conclusão','Narração, descrição e análise','Introdução, desenvolvimento e conclusão','Título, subtítulo e citações'], answer:2, source:'pi', explain:'Dissertação: introdução (tese) + desenvolvimento (argumentos) + conclusão.' },
+  { q:'(PM-MA) O Maranhão integra qual região do Brasil?', opts:['Norte','Centro-Oeste','Nordeste','Norte-Nordeste'], answer:2, source:'ma', explain:'O Maranhão pertence à Região Nordeste.' },
+];
+
+let qIdx = 0, qScore = 0, qAnswered = false;
+
+function startQuiz() {
+  qIdx = 0; qScore = 0; qAnswered = false;
+  document.getElementById('quiz-score').style.display     = 'none';
+  document.getElementById('quiz-container').style.display = 'block';
+  renderQuestion();
+}
+
+function renderQuestion() {
+  if (qIdx >= questions.length) { showScore(); return; }
+  const q = questions[qIdx];
+  qAnswered = false;
+  const sc = q.source === 'ma' ? 'src-ma' : q.source === 'pi' ? 'src-pi' : 'src-both';
+  const sl = q.source === 'ma' ? 'PM-MA'  : q.source === 'pi' ? 'PM-PI'  : 'PM-MA & PM-PI';
+  document.getElementById('quiz-container').innerHTML = `
+    <div class="quiz-card">
+      <div class="question-num">QUESTÃO ${qIdx+1} DE ${questions.length}</div>
+      <span class="question-source ${sc}">${sl}</span>
+      <div class="question-text">${q.q}</div>
+      <div class="options">${q.opts.map((o,i) =>
+        `<button class="option" id="opt-${i}" onclick="selectAnswer(${i})">
+          <span class="option-letter">${String.fromCharCode(65+i)}</span><span>${o}</span>
+        </button>`).join('')}
+      </div>
+      <div class="feedback" id="feedback"></div>
+      <button class="btn-next" id="btn-next" onclick="nextQuestion()">Próxima →</button>
+    </div>`;
+}
+
+function selectAnswer(i) {
+  if (qAnswered) return;
+  qAnswered = true;
+  const q = questions[qIdx];
+  document.querySelectorAll('.option').forEach(o => o.disabled = true);
+  document.getElementById('opt-'+i).classList.add(i === q.answer ? 'correct' : 'wrong');
+  if (i !== q.answer) document.getElementById('opt-'+q.answer).classList.add('correct');
+  if (i === q.answer) qScore++;
+  const fb = document.getElementById('feedback');
+  fb.style.display = 'block';
+  fb.className = 'feedback ' + (i === q.answer ? 'correct' : 'wrong');
+  fb.innerHTML = (i === q.answer ? '✓ Correto! ' : '✗ Errado. ') + q.explain;
+  document.getElementById('btn-next').style.display = 'inline-block';
+}
+
+function nextQuestion() { qIdx++; renderQuestion(); }
+
+function showScore() {
+  document.getElementById('quiz-container').style.display = 'none';
+  document.getElementById('quiz-score').style.display     = 'block';
+  const pct = Math.round((qScore / questions.length) * 100);
+  document.getElementById('score-display').textContent = pct + '%';
+  document.getElementById('score-msg').textContent =
+    pct >= 80 ? '🎉 Excelente! Você está no caminho certo!'
+    : pct >= 60 ? '👍 Bom resultado! Revise os erros.'
+    : '📚 Volte à teoria e tente novamente!';
+  document.getElementById('stat-quiz').textContent = pct + '%';
+}
+
+// ============================================================
+// 12. DICAS
+// ============================================================
+
+const tips = [
+  { icon:'📋', title:'Leia os dois editais',           text:'Quando saírem, leia os editais PM-MA e PM-PI lado a lado e marque as diferenças.' },
+  { icon:'⚠',  title:'Cebraspe tem ponto negativo',   text:'No PM-MA (Cebraspe), resposta errada desconta. Deixe em branco quando inseguro. PM-PI (NUCEPE) não tem ponto negativo.' },
+  { icon:'✍',  title:'Treine redação para PM-PI',     text:'O PM-PI exige redação dissertativa de 20–30 linhas. Escreva 2 textos por semana.' },
+  { icon:'🗺',  title:'MA e PI têm conteúdo local',   text:'PM-MA cobra Hist./Geo. do Maranhão. PM-PI cobra legislação estadual do Piauí.' },
+  { icon:'🏃',  title:'TAF é eliminatório em ambos',  text:'Treine desde o início: corrida, abdominal e barra/flexão conforme o edital.' },
+  { icon:'⏱',  title:'Simule condições reais',        text:'Resolva simulados no mesmo horário da prova, sem pausas longas, por 5 horas.' },
+  { icon:'📰',  title:'Atualidades todos os dias',    text:'15 minutos/dia no Agência Brasil ou G1. Foque em segurança pública e política estadual.' },
+  { icon:'🔁',  title:'Revisão espaçada',              text:'Revise após 1 dia, 1 semana e 1 mês. Método comprovado de fixação de memória.' },
+];
+
+function renderTips() {
+  document.getElementById('tips-grid').innerHTML = tips.map(t => `
+    <div class="tip-card">
+      <div class="tip-icon">${t.icon}</div>
+      <div class="tip-title">${t.title}</div>
+      <div class="tip-text">${t.text}</div>
+    </div>`).join('');
+}
+
+// ============================================================
+// 13. ROTINA DIÁRIA (Painel 2)
+// ============================================================
+
+const MOTIVATIONS = [
+  'A disciplina é a ponte entre objetivos e realizações.',
+  'Cada hora de estudo hoje é um passo à frente na fila.',
+  'O concurso não vai esperar, mas a preparação pode começar agora.',
+  'Sonhos não se realizam — planos, sim. Execute o seu.',
+  'Farda não é presente, é conquista de quem não desistiu.',
+  'Quem treina no silêncio brilha no resultado.',
+  'Consistência supera intensidade. Um dia de cada vez.',
+];
+
+const TEMPLATES = {
+  manha:[
+    {title:'Acordar + Higiene',start:'05:00',end:'05:30',cat:'outro',note:''},
+    {title:'Treino físico — Corrida + Abdominal',start:'05:30',end:'06:30',cat:'fisico',note:'30 min corrida + 3 séries de abdominal e flexão'},
+    {title:'Café da manhã',start:'06:30',end:'07:00',cat:'alimentacao',note:'Refeição reforçada'},
+    {title:'Português — Interpretação de Texto',start:'07:00',end:'09:00',cat:'estudo',note:'Apostila CEBRASPE (PM-MA)'},
+    {title:'Revisão rápida — Português',start:'09:00',end:'09:30',cat:'revisao',note:'Anotar pontos difíceis'},
+    {title:'Pausa + Lanche',start:'09:30',end:'10:00',cat:'descanso',note:''},
+  ],
+  tarde:[
+    {title:'Almoço',start:'12:00',end:'13:00',cat:'alimentacao',note:''},
+    {title:'Direito Constitucional — Direitos Fundamentais',start:'13:00',end:'15:00',cat:'estudo',note:'Art. 5º ao 17 da CF/88'},
+    {title:'Direito Penal — Teoria do Crime',start:'15:00',end:'16:30',cat:'estudo',note:'Dolo, culpa, tentativa'},
+    {title:'Revisão — Constitucional e Penal',start:'16:30',end:'17:00',cat:'revisao',note:'10 questões de cada'},
+    {title:'Simulado — 20 questões mistas',start:'17:00',end:'18:00',cat:'estudo',note:'Sem celular, cronometrado'},
+  ],
+  intensivo:[
+    {title:'Acordar + Café',start:'05:00',end:'05:30',cat:'outro',note:''},
+    {title:'Treino físico',start:'05:30',end:'06:30',cat:'fisico',note:'Corrida 3km + abdominal + flexão'},
+    {title:'Café da manhã',start:'06:30',end:'07:00',cat:'alimentacao',note:''},
+    {title:'Português — 2h foco total',start:'07:00',end:'09:00',cat:'estudo',note:'Interpretação + gramática'},
+    {title:'Pausa ativa',start:'09:00',end:'09:15',cat:'descanso',note:'Alongar, hidratação'},
+    {title:'História do Brasil / Maranhão',start:'09:15',end:'11:00',cat:'estudo',note:'Colonização, Independência, República'},
+    {title:'Almoço + Descanso',start:'11:00',end:'13:00',cat:'alimentacao',note:'20–30min descanso após almoço'},
+    {title:'Dir. Constitucional + Legislação',start:'13:00',end:'15:30',cat:'estudo',note:'CF/88 + Estatuto PM'},
+    {title:'Raciocínio Lógico / Matemática',start:'15:30',end:'17:00',cat:'estudo',note:'20 questões cronometradas'},
+    {title:'Revisão geral do dia',start:'17:00',end:'18:00',cat:'revisao',note:'Rever anotações do dia'},
+    {title:'Jantar + Descanso',start:'18:00',end:'19:30',cat:'alimentacao',note:''},
+    {title:'Atualidades + Redação (PM-PI)',start:'19:30',end:'21:00',cat:'estudo',note:'30min notícias + 30min redação'},
+    {title:'Planejamento do dia seguinte',start:'21:00',end:'21:30',cat:'outro',note:'Anotar prioridades de amanhã'},
+    {title:'Dormir',start:'22:00',end:'05:00',cat:'descanso',note:'8h de sono — essencial para memória'},
+  ],
+  taf:[
+    {title:'Acordar + Café leve',start:'05:30',end:'06:00',cat:'outro',note:''},
+    {title:'Aquecimento',start:'06:00',end:'06:15',cat:'fisico',note:'10 min caminhada + alongamento'},
+    {title:'Treino principal — TAF',start:'06:15',end:'07:30',cat:'fisico',note:'Corrida 12min · Abdominal · Flexão · Barra (PM-MA)'},
+    {title:'Café da manhã reforçado',start:'07:30',end:'08:00',cat:'alimentacao',note:'Proteína + carboidrato'},
+    {title:'Revisão leve — Legislação',start:'09:00',end:'10:30',cat:'revisao',note:'Estatuto PM-MA + PM-PI'},
+    {title:'Descanso',start:'10:30',end:'12:00',cat:'descanso',note:'Recuperação física'},
+  ],
+  revisao:[
+    {title:'Revisão — Português e Informática',start:'08:00',end:'09:30',cat:'revisao',note:'Rever anotações da semana'},
+    {title:'Revisão — História e Geografia',start:'09:30',end:'11:00',cat:'revisao',note:'Mapas mentais + fichamentos'},
+    {title:'Revisão — Direito + Legislação',start:'14:00',end:'16:00',cat:'revisao',note:'CF/88 + Estatuto + Penal'},
+    {title:'Flashcards + 30 questões mistas',start:'16:00',end:'17:30',cat:'revisao',note:'Foco nos pontos errados da semana'},
+  ],
+  simulado:[
+    {title:'Preparação mental + Café',start:'07:30',end:'08:00',cat:'outro',note:'Sem redes sociais antes do simulado'},
+    {title:'SIMULADO COMPLETO — 60 questões',start:'08:00',end:'13:00',cat:'estudo',note:'5h, sem pausas longas'},
+    {title:'Almoço + Descanso',start:'13:00',end:'14:00',cat:'alimentacao',note:''},
+    {title:'Correção e análise dos erros',start:'14:00',end:'16:00',cat:'revisao',note:'Anotar cada erro · Voltar à teoria'},
+  ],
+};
+
+function p2Init() {
+  renderDaysGrid();
+  renderHabits();
+  setActiveDay(new Date().getDay() === 0 ? 6 : new Date().getDay() - 1);
+  updateClock();
+  setInterval(updateClock, 1000);
+  document.getElementById('motivation-text').textContent =
+    MOTIVATIONS[Math.floor(Math.random() * MOTIVATIONS.length)];
+  initPomoCycles();
+  updatePomoDisplay();
+}
+
+function updateClock() {
+  const now = new Date();
+  document.getElementById('clock').textContent =
+    now.toTimeString().slice(0, 5);
+  document.getElementById('date-badge').textContent =
+    now.toLocaleDateString('pt-BR', { weekday:'short', day:'2-digit', month:'short' }).toUpperCase();
+}
+
+function renderDaysGrid() {
+  document.getElementById('days-grid').innerHTML = DAYS.map((d, i) => `
+    <button class="day-btn ${rotinaState.activeDay === i ? 'active' : ''} ${rotinaState.schedule[i].length > 0 ? 'has-routine' : ''}" onclick="setActiveDay(${i})">
+      <span>${d}</span><span class="dn">${i+1}</span>
+    </button>`).join('');
+}
+
+function setActiveDay(i) {
+  rotinaState.activeDay = i;
+  document.getElementById('active-day-name').textContent = DAY_NAMES[i].toUpperCase();
+  renderDaysGrid();
+  renderSchedule();
+  updateSidebarStats();
+}
+
+function renderSchedule() {
+  const blocks = [...rotinaState.schedule[rotinaState.activeDay]].sort((a, b) => a.start.localeCompare(b.start));
+  const container = document.getElementById('schedule');
+  if (!blocks.length) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">📋</div>
+        <div class="empty-title">Dia sem rotina</div>
+        <div class="empty-sub">Clique em "+ Adicionar Bloco" ou use um template.</div>
+      </div>`;
+    return;
+  }
+  container.innerHTML = blocks.map(b => `
+    <div class="time-block">
+      <div class="time-label">${b.start}</div>
+      <div class="block-card cat-${b.cat} ${b.done?'done':''}">
+        <div class="block-header">
+          <div class="block-title">${b.title}</div>
+          <div class="block-meta">
+            <span class="block-duration">${getDuration(b.start, b.end)}</span>
+            <span class="block-cat-tag">${CATS[b.cat]}</span>
+            <div class="block-actions">
+              <button class="block-btn" onclick="toggleDone('${b.id}')" title="Concluir">✓</button>
+              <button class="block-btn" onclick="editBlock('${b.id}')" title="Editar">✏</button>
+              <button class="block-btn" onclick="deleteBlock('${b.id}')" title="Excluir" style="color:var(--red)">✕</button>
+            </div>
+          </div>
+        </div>
+        ${b.note ? `<div class="block-note">${b.note}</div>` : ''}
+        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);margin-top:6px;">${b.start} → ${b.end}</div>
+      </div>
+    </div>`).join('');
+  updateDayProgress();
+  updateSidebarStats();
+}
+
+function getDuration(start, end) {
+  const [sh, sm] = start.split(':').map(Number);
+  const [eh, em] = end.split(':').map(Number);
+  let mins = (eh * 60 + em) - (sh * 60 + sm);
+  if (mins < 0) mins += 24 * 60;
+  if (mins >= 60) return `${Math.floor(mins/60)}h${mins%60 > 0 ? String(mins%60).padStart(2,'0')+'min' : ''}`;
+  return `${mins}min`;
+}
+
+function updateDayProgress() {
+  const blocks = rotinaState.schedule[rotinaState.activeDay];
+  const pct    = blocks.length ? Math.round(blocks.filter(b => b.done).length / blocks.length * 100) : 0;
+  document.getElementById('day-fill').style.width = pct + '%';
+  document.getElementById('day-pct').textContent  = pct + '%';
+}
+
+function updateSidebarStats() {
+  const blocks = rotinaState.schedule[rotinaState.activeDay];
+  document.getElementById('sb-total').textContent = blocks.length;
+  document.getElementById('sb-done').textContent  = blocks.filter(b => b.done).length;
+  const studyMins = blocks
+    .filter(b => b.cat === 'estudo' || b.cat === 'revisao')
+    .reduce((acc, b) => {
+      const [sh, sm] = b.start.split(':').map(Number);
+      const [eh, em] = b.end.split(':').map(Number);
+      let m = (eh * 60 + em) - (sh * 60 + sm);
+      if (m < 0) m += 1440;
+      return acc + m;
+    }, 0);
+  document.getElementById('sb-hours').textContent =
+    studyMins >= 60 ? `${(studyMins / 60).toFixed(1)}h` : `${studyMins}min`;
+}
+
+function saveSchedule() {
+  DB.save(DB.KEYS.schedule, rotinaState.schedule);
+}
+
+function toggleDone(id) {
+  for (let d = 0; d < 7; d++) {
+    const b = rotinaState.schedule[d].find(x => x.id === id);
+    if (b) { b.done = !b.done; break; }
+  }
+  saveSchedule();
+  renderSchedule();
+}
+
+function deleteBlock(id) {
+  for (let d = 0; d < 7; d++) {
+    rotinaState.schedule[d] = rotinaState.schedule[d].filter(x => x.id !== id);
+  }
+  saveSchedule();
+  renderSchedule();
+  renderDaysGrid();
+}
+
+function editBlock(id) {
+  const b = rotinaState.schedule[rotinaState.activeDay].find(x => x.id === id);
+  if (!b) return;
+  rotinaState.editId = id;
+  document.getElementById('modal-title-text').textContent = 'EDITAR BLOCO';
+  document.getElementById('f-title').value = b.title;
+  document.getElementById('f-start').value = b.start;
+  document.getElementById('f-end').value   = b.end;
+  document.getElementById('f-note').value  = b.note || '';
+  document.querySelectorAll('.cat-opt').forEach(el => el.className = 'cat-opt');
+  const catEl = document.querySelector(`[data-cat="${b.cat}"]`);
+  if (catEl) catEl.classList.add('sel-' + b.cat);
+  rotinaState.selectedCat = b.cat;
+  switchModalTab('manual', document.querySelector('.modal-tab'));
+  openModal('overlay-add');
+}
+
+function saveBlock() {
+  const title  = document.getElementById('f-title').value.trim();
+  const start  = document.getElementById('f-start').value;
+  const end    = document.getElementById('f-end').value;
+  const note   = document.getElementById('f-note').value.trim();
+  const repeat = document.getElementById('f-repeat').checked;
+  if (!title || !start || !end) { alert('Preencha título, início e fim.'); return; }
+
+  if (rotinaState.editId) {
+    for (let d = 0; d < 7; d++) {
+      const b = rotinaState.schedule[d].find(x => x.id === rotinaState.editId);
+      if (b) { b.title = title; b.start = start; b.end = end; b.cat = rotinaState.selectedCat; b.note = note; break; }
+    }
+    rotinaState.editId = null;
+  } else {
+    const id    = uid();
+    const block = { id, title, start, end, cat: rotinaState.selectedCat, note, done: false };
+    if (repeat) {
+      for (let d = 0; d < 7; d++) {
+        rotinaState.schedule[d].push({ ...block, id: uid() });
+      }
+    } else {
+      rotinaState.schedule[rotinaState.activeDay].push(block);
+    }
+  }
+  saveSchedule();
+  closeModal('overlay-add');
+  renderSchedule();
+  renderDaysGrid();
+  resetBlockForm();
+}
+
+function clearDay() {
+  if (!confirm(`Limpar todos os blocos de ${DAY_NAMES[rotinaState.activeDay]}?`)) return;
+  rotinaState.schedule[rotinaState.activeDay] = [];
+  saveSchedule();
+  renderSchedule();
+  renderDaysGrid();
+  updateSidebarStats();
+}
+
+function resetBlockForm() {
+  document.getElementById('f-title').value  = '';
+  document.getElementById('f-start').value  = '06:00';
+  document.getElementById('f-end').value    = '07:00';
+  document.getElementById('f-note').value   = '';
+  document.getElementById('f-repeat').checked = false;
+  document.querySelectorAll('.cat-opt').forEach(el => el.className = 'cat-opt');
+  const el = document.querySelector('[data-cat="estudo"]');
+  if (el) el.classList.add('sel-estudo');
+  rotinaState.selectedCat = 'estudo';
+  rotinaState.editId = null;
+  document.getElementById('modal-title-text').textContent = 'NOVO BLOCO';
+}
+
+function applyTemplate(name) {
+  const blocks = TEMPLATES[name];
+  if (!confirm(`Adicionar template "${name}" em ${DAY_NAMES[rotinaState.activeDay]}?`)) return;
+  blocks.forEach(b => {
+    rotinaState.schedule[rotinaState.activeDay].push({ ...b, id: uid(), done: false });
+  });
+  saveSchedule();
+  closeModal('overlay-add');
+  renderSchedule();
+  renderDaysGrid();
+  resetBlockForm();
+}
+
+function openCopyModal() {
+  document.getElementById('copy-from-label').textContent = DAY_NAMES[rotinaState.activeDay];
+  document.getElementById('week-copy-list').innerHTML = DAYS.map((d, i) =>
+    i === rotinaState.activeDay ? '' : `
+    <div class="week-copy-row">
+      <span class="week-copy-label">${DAY_NAMES[i]}</span>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="week-copy-count">${rotinaState.schedule[i].length} bloco(s)</span>
+        <input type="checkbox" id="copy-${i}" style="width:16px;height:16px;accent-color:var(--gold);">
+      </div>
+    </div>`).join('');
+  openModal('overlay-copy');
+}
+
+function executeCopy() {
+  const src = rotinaState.schedule[rotinaState.activeDay];
+  for (let i = 0; i < 7; i++) {
+    const cb = document.getElementById('copy-' + i);
+    if (cb && cb.checked) {
+      src.forEach(b => rotinaState.schedule[i].push({ ...b, id: uid(), done: false }));
+    }
+  }
+  saveSchedule();
+  closeModal('overlay-copy');
+  renderDaysGrid();
+  alert('Rotina copiada!');
+}
+
+function renderHabits() {
+  document.getElementById('habit-mini').innerHTML = HABITS.map(h => `
+    <div class="habit-row">
+      <span class="habit-name">${h}</span>
+      <div class="habit-dots">${DAYS.map((d, i) =>
+        `<div class="habit-dot ${rotinaState.habits[h][i] ? 'done' : ''}" title="${DAY_NAMES[i]}" onclick="toggleHabit('${h}',${i})"></div>`
+      ).join('')}</div>
+    </div>`).join('');
+}
+
+function toggleHabit(h, i) {
+  rotinaState.habits[h][i] = !rotinaState.habits[h][i];
+  DB.save(DB.KEYS.habits, rotinaState.habits);
+  renderHabits();
+}
+
+function selectCat(el) {
+  document.querySelectorAll('.cat-opt').forEach(e => e.className = 'cat-opt');
+  const cat = el.dataset.cat;
+  el.classList.add('sel-' + cat);
+  rotinaState.selectedCat = cat;
+}
+
+function openAddModal() {
+  resetBlockForm();
+  switchModalTab('manual', document.querySelectorAll('.modal-tab')[0]);
+  openModal('overlay-add');
+}
+
+function switchModalTab(tab, btn) {
+  document.getElementById('tab-manual').style.display    = tab === 'manual'    ? 'block' : 'none';
+  document.getElementById('tab-templates').style.display = tab === 'templates' ? 'block' : 'none';
+  document.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+}
+
+// ── Pomodoro ──
+function initPomoCycles() {
+  document.getElementById('pomo-cycles').innerHTML =
+    Array(4).fill(0).map((_, i) =>
+      `<div class="pomo-cycle ${i < rotinaState.pomoCycles ? 'done' : ''}" id="pc-${i}"></div>`
+    ).join('');
+}
+
+function updatePomoDisplay() {
+  const mins = Math.floor(rotinaState.pomoSeconds / 60);
+  const secs = rotinaState.pomoSeconds % 60;
+  document.getElementById('pomo-display').textContent =
+    `${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+}
+
+function pomoToggle() {
+  if (rotinaState.pomoRunning) {
+    clearInterval(rotinaState.pomoInterval);
+    rotinaState.pomoRunning = false;
+    document.getElementById('pomo-start').textContent = 'Continuar';
+    document.getElementById('pomo-start').classList.remove('running');
+    document.getElementById('pomo-status').textContent = 'PAUSADO';
+  } else {
+    if (rotinaState.pomoSeconds === 0) {
+      const mins = parseInt(document.getElementById('pomo-mode').value);
+      rotinaState.pomoSeconds = mins * 60;
+    }
+    rotinaState.pomoRunning = true;
+    document.getElementById('pomo-start').textContent = 'Pausar';
+    document.getElementById('pomo-start').classList.add('running');
+    document.getElementById('pomo-status').textContent = 'FOCANDO...';
+    rotinaState.pomoInterval = setInterval(() => {
+      rotinaState.pomoSeconds--;
+      updatePomoDisplay();
+      if (rotinaState.pomoSeconds <= 0) {
+        clearInterval(rotinaState.pomoInterval);
+        rotinaState.pomoRunning = false;
+        document.getElementById('pomo-start').textContent = 'Iniciar';
+        document.getElementById('pomo-start').classList.remove('running');
+        document.getElementById('pomo-status').textContent = 'CONCLUÍDO ✓';
+        rotinaState.pomoCycles = Math.min(4, rotinaState.pomoCycles + 1);
+        initPomoCycles();
+      }
+    }, 1000);
+  }
+}
+
+function pomoReset() {
+  clearInterval(rotinaState.pomoInterval);
+  rotinaState.pomoRunning  = false;
+  rotinaState.pomoSeconds  = 0;
+  updatePomoDisplay();
+  document.getElementById('pomo-start').textContent = 'Iniciar';
+  document.getElementById('pomo-start').classList.remove('running');
+  document.getElementById('pomo-status').textContent = 'PRONTO';
+}
+
+// ============================================================
+// 14. NAVEGAÇÃO ENTRE PAINÉIS / TABS
+// ============================================================
+
+function switchPage(page, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.page-nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(page).classList.add('active');
+  btn.classList.add('active');
+  // Ao abrir banco, re-render para refletir dados atuais
+  if (page === 'p3') renderBanco();
+}
+
+function showPanel(name, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+
+// ============================================================
+// 15. INICIALIZAÇÃO GERAL
+// ============================================================
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Painel 1
+  renderSubjects();
+  renderChecks();
+  renderTimeline();
+  renderCmpTable();
+  renderTips();
+  startQuiz();
+
+  // Painel 2
+  p2Init();
+
+  // Painel 3 (banco)
+  renderBanco();
+
+  // Fecha modais ao clicar fora
+  document.querySelectorAll('.overlay').forEach(o => {
+    o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'); });
+  });
+
+  // Pomodoro: troca de modo
+  document.getElementById('pomo-mode').addEventListener('change', () => {
+    if (!rotinaState.pomoRunning) pomoReset();
+  });
+
+  // Filtros do banco em tempo real
+  ['filter-subject','filter-type','filter-status','filter-search'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', applyBancoFilter);
+    if (el) el.addEventListener('change', applyBancoFilter);
+  });
+});
+
+
+// ============================================================
+// SISTEMA DE LOGIN
+// ============================================================
+
+/** Senha definida no código — altere aqui se necessário */
+const SENHA_CORRETA = '0800';
+
+/** Tenta autenticar com a senha digitada */
+function doLogin() {
+  const input = document.getElementById('login-pwd');
+  const errorEl = document.getElementById('login-error');
+  const pwd = input.value;
+
+  if (pwd === SENHA_CORRETA) {
+    // Senha correta: oculta tela de login e exibe painel
+    const loginScreen = document.getElementById('login-screen');
+    loginScreen.style.transition = 'opacity 0.4s ease';
+    loginScreen.style.opacity = '0';
+    setTimeout(() => {
+      loginScreen.style.display = 'none';
+      document.getElementById('main-app').style.display = 'block';
+    }, 400);
+    errorEl.classList.remove('visible');
+    input.classList.remove('error');
+  } else {
+    // Senha errada: exibe mensagem de erro e anima o campo
+    errorEl.classList.add('visible');
+    input.classList.add('error');
+    input.value = '';
+    input.focus();
+    setTimeout(() => input.classList.remove('error'), 500);
+  }
+}
+
+/** Alterna visibilidade da senha */
+function togglePwdVisibility() {
+  const input = document.getElementById('login-pwd');
+  const btn   = document.getElementById('toggle-btn');
+  if (input.type === 'password') {
+    input.type = 'text';
+    btn.textContent = '🙈';
+  } else {
+    input.type = 'password';
+    btn.textContent = '👁';
+  }
+}
+
+// Foca no campo de senha automaticamente ao carregar
+window.addEventListener('load', () => {
+  const pwd = document.getElementById('login-pwd');
+  if (pwd) setTimeout(() => pwd.focus(), 300);
+});
+
+</script>
+
+</div><!-- /main-app -->
+</body>
+</html>
